@@ -5,6 +5,17 @@ All notable changes to 写稿Agent will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.5] - 2026-04-03
+
+### Added
+- ✨ **立场引擎 (`position-engine`)**：新增 Stage 1.5 环节，在素材调研前强制确立观点、设定攻击面及核心偏见，为文章定下主心骨。
+- 🛑 **强互动断点机制**：重构 `SKILL.md` (工作流导演)，注入强制中断指令（Yield/Stop）。明确要求子代理在 Stage 3（大纲）、Stage 5.5（标题）、Stage 7（修改决策）、Stage 9（受众选择）产出后原地挂起，禁止自行向下推演，只有收到用户批准指令后方可放行。
+- 📱 **社交传播测试 (`wechat-reader-test`)**：废除纯信息流算法视角的 `toutiao-reader-test`，改为评估微信朋友圈语境下的防杠精、强共鸣和社交人设风险。
+
+### Changed
+- 🔪 **底层生成风格大洗牌（6刀重构）**：彻底修复多 prompt 对抗内耗。重新定义了何为“金句”（从结构优美转向具有代价、场景的断言），放宽了对 `writing-executor` 的大纲拘束，容忍写作局部跑题以换取真实呼吸感。
+- 🧹 **去污与去偏见**：清洗了框架底座（如 `writing-clarifier` 和执行代理）默认带有的“互联网/程序员”行话和案例偏见，确保各类行业通杀。
+
 ## [0.7.0] - 2026-03-15
 
 ### Added

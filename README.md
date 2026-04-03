@@ -1,4 +1,4 @@
-# 写稿Agent v0.7.0
+# 写稿Agent v0.7.5
 
 > 🚀 一个基于 Claude Code Skills + Subagents 的全栈写作系统。
 > 
@@ -14,7 +14,7 @@
 > 从选题生成、风格建模、写作执行到发布评审与配图，提供完整的 AI 写作工作流。
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-v0.7.0-blue.svg)](https://github.com/dongbeixiaohuo/writing-agent/releases)
+[![Version](https://img.shields.io/badge/version-v0.7.5-blue.svg)](https://github.com/dongbeixiaohuo/writing-agent/releases)
 [![Claude Code](https://img.shields.io/badge/Claude-Code%20Skills-blue)](https://code.claude.com)
 [![DeepSeek](https://img.shields.io/badge/DeepSeek-Compatible-green)](https://platform.deepseek.com)
 
@@ -22,7 +22,12 @@
 
 写稿Agent 是一个**协作式写作工作流系统**，通过强制性的模式选择、需求澄清、风格建模、素材调研和主编审稿，帮助你写出**不像AI生成**的高质量文章。
 
-### v0.7.0 系统自进化双轴架构 ⭐ New
+### v0.7.5 锋利度与互动流强化 ⭐ New
+- 🔪 **6刀底层重构**：引入 `position-engine` (Stage 1.5) 强制锁定立场，洗去默认程序员/互联网偏见；摒弃“空洞金句”，定义带有“代价、场景与判断”的真实金句；允许大纲执行时“局部失控”以增强真人口吻。
+- 🛑 **强制互动中断机制**：在工作流导演中注入 `Yield/Stop` 强拦截器，彻底解决大模型 auto-pilot 的过度自治越权问题。强行限制大纲、标题、一稿审改和社交测试 4 个核心节点，必须经用户真实确认后才允许向下推演。
+- 📱 **微信社交传播测试**：将头条系算法推荐测评全面升级为 `wechat-reader-test`，专注检验防杠精表现、亲友圈人设匹配和社交点赞动机。
+
+### v0.7.0 系统自进化双轴架构
 - 🔄 **自动复盘与经验装载**：引入 `edit-diff-learner` 和 `memory-loader`。系统会自动对撞定稿与初稿提炼写作经验（15维风格DSL），并在下次写作前编译记忆包 (`00_memory_packet.md`)，注入到大纲、标题、执行和去AI味 Agent 中，实现"长记性"。
 - ⚙️ **自动化物理排版 Hook**：利用 Claude Code Hooks 机制跳出大模型约束，在工作流大结局通过 `auto_clean_hook.py` 静默生成排版纯净版 `_clean.txt`。
 
@@ -85,7 +90,7 @@
 | **适用场景** | 需要自动识别意图 | 需要隔离执行的任务 |
 | **Token 消耗** | 会累积 | 每个任务独立 |
 
-### 本项目的架构（v0.7.0）
+### 本项目的架构（v0.7.5）
 
 本项目采用 **Skills + Subagents 混合架构**：
 

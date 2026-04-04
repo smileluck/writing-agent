@@ -11,7 +11,10 @@
  */
 
 (async function() {
-  const SKILL_PATH = '/Users/pan/.claude/skills/web-article-extractor/scripts';
+  const DEFAULT_SKILL_PATH = '.claude/skills/公众号文章获取/scripts';
+  const SKILL_PATH = typeof globalThis !== 'undefined' && globalThis.__WEB_ARTICLE_EXTRACTOR_PATH__
+    ? globalThis.__WEB_ARTICLE_EXTRACTOR_PATH__
+    : DEFAULT_SKILL_PATH;
 
   /**
    * Load Readability extractor script

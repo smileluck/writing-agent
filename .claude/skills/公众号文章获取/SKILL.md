@@ -43,7 +43,7 @@ await javascript_tool({
 
 // 4. 使用 Readability 提取（推荐）
 const readabilityScript = await fs.readFile(
-  '~/.claude/skills/web-article-extractor/scripts/readability_extractor.js',
+  '.claude/skills/公众号文章获取/scripts/readability_extractor.js',
   'utf8'
 );
 

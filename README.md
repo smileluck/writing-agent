@@ -1,4 +1,4 @@
-# 写稿Agent v0.7.5
+# 写稿Agent v0.7.6
 
 > 🚀 一个基于 Claude Code Skills + Subagents 的全栈写作系统。
 > 
@@ -14,7 +14,7 @@
 > 从选题生成、风格建模、写作执行到发布评审与配图，提供完整的 AI 写作工作流。
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-v0.7.5-blue.svg)](https://github.com/dongbeixiaohuo/writing-agent/releases)
+[![Version](https://img.shields.io/badge/version-v0.7.6-blue.svg)](https://github.com/dongbeixiaohuo/writing-agent/releases)
 [![Claude Code](https://img.shields.io/badge/Claude-Code%20Skills-blue)](https://code.claude.com)
 [![DeepSeek](https://img.shields.io/badge/DeepSeek-Compatible-green)](https://platform.deepseek.com)
 
@@ -22,7 +22,12 @@
 
 写稿Agent 是一个**协作式写作工作流系统**，通过强制性的模式选择、需求澄清、风格建模、素材调研和主编审稿，帮助你写出**不像AI生成**的高质量文章。
 
-### v0.7.5 锋利度与互动流强化 ⭐ New
+### v0.7.6 深化生产骨架 (阶段2重构) ⭐ New
+- 🩸 **微观伤疤打捞器 (`research-expert`)**：放弃宏观大道理，定向打捞“致命场景”、“隐秘代价”与“反常识潜规则”，输出 `02_scar_tissue.md`。
+- 💸 **社交印象管理 (`empathy-designer`)**：升维共情点为“社交转发动机”（印象管理假说），构建带有强社交货币属性的 `04_share_map.md`。
+- 🏁 **极道开头赛马场 (`opening-tournament`)**：新增 Stage 5.8 环节，强制并行生成 3 款差异化前缀（暴击/撕裂/冷眼），由用户选出最优开局。
+
+### v0.7.5 锋利度与互动流强化
 - 🔪 **6刀底层重构**：引入 `position-engine` (Stage 1.5) 强制锁定立场，洗去默认程序员/互联网偏见；摒弃“空洞金句”，定义带有“代价、场景与判断”的真实金句；允许大纲执行时“局部失控”以增强真人口吻。
 - 🛑 **强制互动中断机制**：在工作流导演中注入 `Yield/Stop` 强拦截器，彻底解决大模型 auto-pilot 的过度自治越权问题。强行限制大纲、标题、一稿审改和社交测试 4 个核心节点，必须经用户真实确认后才允许向下推演。
 - 📱 **微信社交传播测试**：将头条系算法推荐测评全面升级为 `wechat-reader-test`，专注检验防杠精表现、亲友圈人设匹配和社交点赞动机。
@@ -67,7 +72,7 @@
 
 - ✅ **自进化归因引擎**：系统自动追溯初稿与定稿差异，抽取经验打包成 `99_episode.md` 实现跨次记忆 ✨ v0.7.0 New
 - ✅ **无痕排版 Hook**：自动拦截大模型生成结果，利用纯 Python 正则脚本清除底噪，实现公众号直接粘贴 ✨ v0.7.0 New
-- ✅ **超大编制 Subagent 架构**：16 个独立 Subagent 实现上下文完美隔离，将漫长的写作长链路切碎，节省海量 Token
+- ✅ **超大编制 Subagent 架构**：18 个独立 Subagent 实现上下文完美隔离，将漫长的写作长链路切碎，节省海量 Token
 - ✅ **深度协作工作流**：全 14 阶段创作者模式，囊括盘前准备、记忆装载、素材分析到模拟直播的全链条闭环
 - ✅ **强制去 AI 味道**：Humanizer与24条红线规则，自动去除小标题病、排比上瘾、过度升华等AI特有文风
 - ✅ **风格建模 v3.1**：支持公众号 URL 自动抓取分析、批量多篇拆解、增量汇入语料库
@@ -101,7 +106,7 @@
 │   ├── 公众号文章获取/         # 独立工具（检测到URL自动触发）
 │   └── 风格建模/               # 独立工具（"学习这个风格"触发）
 │
-└── agents/                     # 显式调用，上下文隔离（16个编外专员）
+└── agents/                     # 显式调用，上下文隔离（18个编外专员）
     │
     ├── ── Stage 0-X: 记忆引擎 ──
     ├── memory-loader.md        # 记忆装载器 ✨ v0.7.0 New
@@ -118,6 +123,7 @@
     ├── empathy-designer.md     # 共情点/阅读心流设计
     ├── concretizer.md          # 具象化特写与翻译
     ├── title-designer.md       # 标题爆款设计与敲定
+    ├── opening-tournament.md   # 开头赛马
     │
     ├── ── Stage 6: 原创下笔 ──
     ├── writing-executor.md     # 原生撰写执行
@@ -125,7 +131,7 @@
     ├── ── Stage 7-11: 审核防呆与升华 ──
         ├── editor-review.md        # 主编初审筛雷
         ├── pre-publish-review.md   # 发布前终级追问反馈
-        ├── toutiao-reader-test.md  # 读者群体模拟直播
+        ├── wechat-reader-test.md   # 微信社交传播测试
         ├── humanizer.md            # 去AI病理净化/灵魂注入
         └── article-illustrator.md  # 高维情绪插图配图师
 ```
@@ -159,8 +165,8 @@
 **重要说明：**
 
 1. **克隆项目后，Skills 已经在项目目录里了**
-   - 项目文件结构：`writing-agent/.claude/skills/`（包含 13 个 Skills）
-   - 这些 Skills 是项目的一部分，随项目一起下载
+   - 项目文件结构：`writing-agent/.claude/skills/`（当前包含 3 个项目级 Skills）
+   - 长链路能力由 `writing-agent/.claude/agents/` 下的 18 个 Subagent 承载
 
 2. **必须在项目目录中启动 Claude Code**
    ```powershell
@@ -411,21 +417,11 @@ claude --version
    ```powershell
    Get-ChildItem -Path ".claude\skills" -Directory
    ```
-4. **预期输出**：应该看到 13 个 Skills 目录
+4. **预期输出**：应该看到 3 个 Skills 目录
    ```
    工作流导演
-   选题生成器
-   选题调研
-   澄清写作需求
+   公众号文章获取
    风格建模
-   调研资料
-   大纲架构师
-   共情点设计师
-   具象化专家
-   标题设计师
-   写作执行
-   主编审稿
-   发布前评审
    ```
 
 **如果没有看到这些目录：**
@@ -442,7 +438,7 @@ cd ~/Projects/writing-agent  # 替换为你的实际路径
 ls -la .claude/skills/
 ```
 
-应该看到 13 个 Skills 目录。
+应该看到 3 个 Skills 目录。
 
 </details>
 

@@ -5,6 +5,16 @@ All notable changes to 写稿Agent will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.6] - 2026-04-05
+
+### Added
+- ✨ **开头赛马场 (`opening-tournament`)**：彻底切断生硬的大纲过渡，在 Stage 5.8 强制并行生成 3 款绝对差异化的开头（暴击场景、认知撕裂、极道冷眼），并交由用户抉择，选定的方案(`05c_opening_hook.md`)将被强制死锁为正文首段。
+
+### Changed
+- 🔪 **研究专家转型 (`research-expert`)**：升级为“微观伤疤打捞器”，彻底废除冰冷的行业百科与宏大数据，要求精准抓取具备颗粒度的“生活刺痛点与隐秘代价”，生成血淋淋的 `02_scar_tissue.md`。
+- 🎭 **共情引擎升维 (`empathy-designer`)**：打通戈夫曼印象管理假说，不再停留在简单的“引起共鸣”，而是规划读者转发的8大“社交转发动机”（如暗讽、自我标榜等），输出高纯度的 `04_share_map.md`。
+- ⚙️ **执行引擎与调度卡点强化**：工作流总导演在 Stage 5.8 增加绝对硬停机等待点；正文执行器升级约束：必须合并读取赛马优胜的开头、填装微观伤疤并触发分享动机。
+
 ## [0.7.5] - 2026-04-03
 
 ### Added

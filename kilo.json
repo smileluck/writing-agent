@@ -1,0 +1,11 @@
+{
+  "instructions": [
+    "AGENTS.md",
+    "CLAUDE.md"
+  ],
+  "skills": {
+    "paths": [
+      "./.kilo/skill"
+    ]
+  }
+}

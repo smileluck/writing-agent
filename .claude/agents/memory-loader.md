@@ -1,11 +1,7 @@
 ---
-name: memory-loader
-description: |
-  [Subagent] 记忆装载器。
-  扫描历史写作复盘(99_episode.md)，提炼跨项目的稳定写作偏好规则，
-  生成当前项目的 00_memory_packet.md 供下游 Agent 读取。
-  在 Stage 0（工作流最前面）由总导演调用。
-tools: Read, Write, Bash, Glob
+name: (memory
+description: 记忆装载器。在新写作任务启动时最先被调用，装载历史写作经验和偏好。由工作流导演在 Stage 0 显式调用。
+tools: Read, Write, Bash, Glob, Grep
 model: sonnet
 ---
 

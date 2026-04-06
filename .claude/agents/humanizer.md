@@ -1,10 +1,7 @@
 ---
 name: humanizer
-description: |
-  [Subagent] 文本去AI味专家。
-  基于 WikiProject AI Cleanup 综合指南，深度去除"AI腔"，注入人类灵魂。
-  由 Workflow Producer 在流程末尾显式询问调用，或作为独立工具使用。
-tools: Read, Write, Bash, Glob
+description: 文本去AI味专家。基于 WikiProject AI Cleanup 综合指南，深度去除"AI腔"，注入人类灵魂。由工作流导演在流程末尾显式调用。
+tools: Read, Write, Bash, Glob, Grep
 model: sonnet
 ---
 

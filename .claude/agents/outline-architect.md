@@ -1,5 +1,5 @@
 ---
-name: outline-architect
+name: (outline
 description: 大纲架构师。根据主题和素材设计文章结构。由工作流导演在 Stage 3 显式调用。
 tools: Read, Write, Bash, Glob, Grep
 model: sonnet

@@ -1,7 +1,7 @@
 ---
-name: empathy-designer
+name: (empathy
 description: 社交货币与共情设计师。根据大纲和伤疤细节，设计文章的分享动因（Impression Management），建立 Share Map。由工作流导演在 Stage 4 显式调用。
-tools: Read, Write, Bash, Glob
+tools: Read, Write, Bash, Glob, Grep
 model: sonnet
 ---
 

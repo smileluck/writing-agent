@@ -1,7 +1,7 @@
 ---
-name: pre-publish-review
+name: v2.0
 description: 发布前评审专家 v2.0。通过"发布前5问"评审 + 红队挑刺 + 具体修改建议，确保每个问题都有可执行方案。由工作流导演在 Stage 8 显式调用。
-tools: Read, Write, Bash, Glob
+tools: Read, Write, Bash, Glob, Grep
 model: sonnet
 ---
 

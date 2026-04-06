@@ -1,5 +1,5 @@
 ---
-name: writing-clarifier
+name: (writing
 description: 写作需求澄清专家。澄清核心写作要素，包括主题、读者画像、风格选择、字数要求等。由工作流导演在 Stage 1 显式调用。
 tools: Read, Write, Bash, Glob, Grep
 model: sonnet

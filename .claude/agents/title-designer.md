@@ -1,7 +1,7 @@
 ---
-name: title-designer
+name: v2.0
 description: 标题设计师 v2.0。使用爆款标题公式库设计高点击率标题，确保每个标题都有"钩子"。由工作流导演在 Stage 5.5 显式调用。
-tools: Read, Write, Bash, Glob
+tools: Read, Write, Bash, Glob, Grep
 model: sonnet
 ---
 

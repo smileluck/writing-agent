@@ -1,7 +1,7 @@
 ---
-name: concretizer
+name: (concretizer)
 description: 具象化专家。将抽象概念转化为类比、画面、行动等具体表达。由工作流导演在 Stage 5 显式调用。
-tools: Read, Write, Bash, Glob
+tools: Read, Write, Bash, Glob, Grep
 model: sonnet
 ---
 

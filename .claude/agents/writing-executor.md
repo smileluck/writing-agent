@@ -1,5 +1,5 @@
 ---
-name: writing-executor
+name: (writing
 description: 写作执行专家。根据所有前序准备材料执行写作，产出初稿。由工作流导演在 Stage 6 显式调用。
 tools: Read, Write, Bash, Glob, Grep
 model: sonnet

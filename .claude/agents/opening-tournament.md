@@ -1,7 +1,7 @@
 ---
-name: opening-tournament
+name: (opening
 description: 开头赛马机制。根据前序策划信息，并行提供 3 种极具差异化的实战开头原型方案（字数 150-300 字/个），由工作流导演在 Stage 5.8 显式调用。
-tools: Read, Write, Bash, Glob
+tools: Read, Write, Bash, Glob, Grep
 model: sonnet
 ---
 

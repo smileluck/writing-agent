@@ -1,10 +1,7 @@
 ---
-name: edit-diff-learner
-description: |
-  [Subagent] 写作复盘学习器。
-  对比 AI 初稿(draft_v1.md) 与用户确认的最终定稿，提炼结构化的写作经验教训。
-  由工作流导演在流程收尾阶段自动调用（需要至少经历过一轮修改才有意义）。
-tools: Read, Write, Bash, Glob
+name: (edit
+description: 写作复盘学习器。从"初稿→定稿"的演变中提炼可复用的写作经验。由工作流导演在 Stage 13 显式调用。
+tools: Read, Write, Bash, Glob, Grep
 model: sonnet
 ---
 

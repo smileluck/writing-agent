@@ -1,10 +1,7 @@
 ---
-name: article-illustrator
-description: |
-  [Subagent] 文章配图师。
-  负责为文章设计视觉风格，自动生成配图并插入到文章中。
-  采用 "Type × Style" 双维度设计理论，确保配图既有信息量又有美感。
-tools: Read, Write, Bash, Glob, GenerateImage
+name: article
+description: 文章配图师。分析文章情感节点，设计视觉风格并生成高质量配图插入文章。由工作流导演在 Stage 11 显式调用。
+tools: Read, Write, Bash, Glob, Grep
 model: sonnet
 ---
 

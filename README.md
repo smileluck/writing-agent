@@ -1,6 +1,7 @@
 # 写稿Agent v0.7.6
 
-> 🚀 一个基于 Claude Code Skills + Subagents 的全栈写作系统。
+> 🚀 一个基于 Skills + Subagents 的全栈写作系统。
+> 兼容 **Claude Code** / **Kilo** / **Trae** 三种 CLI/IDE 工具。
 > 
 > **不仅是写作，更是打磨进化：**
 > *   🧠 **自进化架构**：首次引入采样编译闭环，能记住修改偏好并复用，越用越顺手。
@@ -15,12 +16,26 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Version](https://img.shields.io/badge/version-v0.7.6-blue.svg)](https://github.com/dongbeixiaohuo/writing-agent/releases)
-[![Claude Code](https://img.shields.io/badge/Claude-Code%20Skills-blue)](https://code.claude.com)
-[![DeepSeek](https://img.shields.io/badge/DeepSeek-Compatible-green)](https://platform.deepseek.com)
+[![Claude Code](https://img.shields.io/badge/Claude-Code-blue)](https://code.claude.com)
+[![Kilo](https://img.shields.io/badge/Kilo-CLI-green)](https://kilo.ai)
+[![Trae](https://img.shields.io/badge/Trae-IDE-orange)](https://trae.cn)
 
 ## 🎯 项目简介
 
 写稿Agent 是一个**协作式写作工作流系统**，通过强制性的模式选择、需求澄清、风格建模、素材调研和主编审稿，帮助你写出**不像AI生成**的高质量文章。
+
+### 多工具兼容
+
+本项目同时支持以下工具，配置文件自动同步：
+
+| 工具 | 配置目录 | 状态 |
+|------|---------|------|
+| **Claude Code** | `.claude/` | 原生支持 |
+| **Kilo** | `.kilo/` | 原生支持（数据源） |
+| **Trae** | `.trae/` | 自动同步 |
+
+- `.kilo/` 是唯一数据源，修改后运行 `python scripts/sync_config.py` 自动同步到其他目录
+- 详见 [SYNC.md](SYNC.md)
 
 ### v0.7.6 深化生产骨架 (阶段2重构) ⭐ New
 - 🩸 **微观伤疤打捞器 (`research-expert`)**：放弃宏观大道理，定向打捞“致命场景”、“隐秘代价”与“反常识潜规则”，输出 `02_scar_tissue.md`。
@@ -100,40 +115,45 @@
 本项目采用 **Skills + Subagents 混合架构**：
 
 ```
-.claude/
-├── skills/                     # 语义触发（3个）
+.kilo/                          ← 唯一数据源（同步到 .claude/ 和 .trae/）
+├── skill/                      # 语义触发（3个）
 │   ├── 工作流导演/             # ⭐ 核心调度器（调用所有 Subagent）
 │   ├── 公众号文章获取/         # 独立工具（检测到URL自动触发）
 │   └── 风格建模/               # 独立工具（"学习这个风格"触发）
 │
-└── agents/                     # 显式调用，上下文隔离（18个编外专员）
-    │
-    ├── ── Stage 0-X: 记忆引擎 ──
-    ├── memory-loader.md        # 记忆装载器 ✨ v0.7.0 New
-    ├── edit-diff-learner.md    # 归因溯源与经验萃取 ✨ v0.7.0 New
-    │
-    ├── ── Stage X: 选题库系统 ──
-    ├── topic-generator.md      # 选题生成器
-    ├── topic-research.md       # 选题深度剖析
-    │
-    ├── ── Stage 1-5: 策划定调 ──
-    ├── writing-clarifier.md    # 澄清需求与受众边界
-    ├── research-expert.md      # 调研资料池聚合
-    ├── outline-architect.md    # 逻辑大纲搭建
-    ├── empathy-designer.md     # 共情点/阅读心流设计
-    ├── concretizer.md          # 具象化特写与翻译
-    ├── title-designer.md       # 标题爆款设计与敲定
-    ├── opening-tournament.md   # 开头赛马
-    │
-    ├── ── Stage 6: 原创下笔 ──
-    ├── writing-executor.md     # 原生撰写执行
-    │
-    ├── ── Stage 7-11: 审核防呆与升华 ──
-        ├── editor-review.md        # 主编初审筛雷
-        ├── pre-publish-review.md   # 发布前终级追问反馈
-        ├── wechat-reader-test.md   # 微信社交传播测试
-        ├── humanizer.md            # 去AI病理净化/灵魂注入
-        └── article-illustrator.md  # 高维情绪插图配图师
+├── agent/                      # 显式调用，上下文隔离（18个编外专员）
+│   │
+│   ├── ── Stage 0-X: 记忆引擎 ──
+│   ├── memory-loader.md        # 记忆装载器 ✨ v0.7.0 New
+│   ├── edit-diff-learner.md    # 归因溯源与经验萃取 ✨ v0.7.0 New
+│   │
+│   ├── ── Stage X: 选题库系统 ──
+│   ├── topic-generator.md      # 选题生成器
+│   ├── topic-research.md       # 选题深度剖析
+│   │
+│   ├── ── Stage 1-5: 策划定调 ──
+│   ├── writing-clarifier.md    # 澄清需求与受众边界
+│   ├── research-expert.md      # 调研资料池聚合
+│   ├── outline-architect.md    # 逻辑大纲搭建
+│   ├── empathy-designer.md     # 共情点/阅读心流设计
+│   ├── concretizer.md          # 具象化特写与翻译
+│   ├── title-designer.md       # 标题爆款设计与敲定
+│   ├── opening-tournament.md   # 开头赛马
+│   │
+│   ├── ── Stage 6: 原创下笔 ──
+│   ├── writing-executor.md     # 原生撰写执行
+│   │
+│   ├── ── Stage 7-11: 审核防呆与升华 ──
+│       ├── editor-review.md        # 主编初审筛雷
+│       ├── pre-publish-review.md   # 发布前终级追问反馈
+│       ├── wechat-reader-test.md   # 微信社交传播测试
+│       ├── humanizer.md            # 去AI病理净化/灵魂注入
+│       └── article-illustrator.md  # 高维情绪插图配图师
+│
+└── styles/                      # 风格库（5+套）
+    ├── jiubian.md
+    ├── 墨水怪风.md
+    └── ...
 ```
 
 ### 工作流程示意
@@ -162,19 +182,32 @@
 
 ### Skills 自动加载机制
 
+**三种工具均可使用：**
+
+| 工具 | 配置目录 | Skills 路径 | 加载方式 |
+|------|---------|------------|---------|
+| **Claude Code** | `.claude/` | `.claude/skills/` | 自动扫描 |
+| **Kilo** | `.kilo/` | `.kilo/skill/` | kilo.json 配置 |
+| **Trae** | `.trae/` | `.trae/skills/` | 自动扫描 |
+
+> 三个目录的内容通过 `scripts/sync_config.py` 保持同步，`.kilo/` 为唯一数据源。详见 [SYNC.md](SYNC.md)。
+
 **重要说明：**
 
-1. **克隆项目后，Skills 已经在项目目录里了**
-   - 项目文件结构：`writing-agent/.claude/skills/`（当前包含 3 个项目级 Skills）
-   - 长链路能力由 `writing-agent/.claude/agents/` 下的 18 个 Subagent 承载
+1. **克隆项目后，配置已经在项目目录里了**
+   - 项目文件结构：`writing-agent/.kilo/skill/`（3 个项目级 Skills）
+   - 长链路能力由 `writing-agent/.kilo/agent/` 下的 18 个 Subagent 承载
+   - 同步后的副本在 `.claude/skills/` 和 `.trae/skills/`
 
-2. **必须在项目目录中启动 Claude Code**
+2. **必须在项目目录中启动工具**
    ```powershell
    cd writing-agent        # 先进入项目目录
-   claude                  # 再启动 Claude Code
+   claude                  # Claude Code
+   kilo                    # Kilo
+   # Trae IDE 直接打开项目文件夹即可
    ```
    
-   ⚠️ **关键**：Claude Code 只会加载**当前目录**下的 `.claude/skills/`
+   ⚠️ **关键**：工具只会加载**当前目录**下的配置
    
    - ✅ 正确：在 `writing-agent/` 目录中启动 → Skills 自动加载
    - ❌ 错误：在其他目录启动 → Skills 不会被加载
@@ -893,7 +926,7 @@ Claude 会：
    - 典型段落模板
    - 禁忌清单
 2. 提取"招牌动作"（最具辨识度的写作习惯）
-3. 保存风格文件到 .claude/styles/XXX风格.md
+3. 保存风格文件到 `.kilo/styles/XXX风格.md`
     ↓
 下次写作时可以直接调用这个风格
 ```
@@ -923,27 +956,27 @@ Claude 会：
 
 ## 🎨 风格库示例
 
-项目自带四个风格示例：
+项目自带四个风格示例（位于 `.kilo/styles/`，自动同步到 `.claude/styles/`）：
 
-### 1. 墨水怪风（`.claude/styles/墨水怪风.md`）
+### 1. 墨水怪风（`.kilo/styles/墨水怪风.md`）
 - **核心人格**：愤世嫉俗但真诚的毒舌老哥
 - **招牌动作**：悖论翻转、质疑打断、真诚骂人
 - **特色词汇**：兽性、进化心理学、巴甫洛夫
 - **适用场景**：观点文、批判性分析
 
-### 2. 九边风（`.claude/styles/jiubian.md`）
+### 2. 九边风（`.kilo/styles/jiubian.md`）
 - **核心人格**：职场老炮式人生导师
 - **招牌动作**："那问题来了"、案例故事化、承认局限
 - **分析模式**：现象→机制→人性→出路
 - **适用场景**：职场分析、深度解读
 
-### 3. 老总在人间风（`.claude/styles/老总在人间.md`）✨ 新增
+### 3. 老总在人间风（`.kilo/styles/老总在人间.md`）✨ 新增
 - **核心人格**：看透职场和人性的"老油条"
 - **招牌动作**："拖出去砍了"夸张式反驳、【】强调金句、直白揭露
 - **特色表达**：刻在骨髓里、本金风险、知识付费推广
 - **适用场景**：职场真相揭露、务实建议、知识付费内容
 
-### 4. sanbiaobiao风（`.claude/styles/sanbiaobiao.md`）✨ 新增
+### 4. sanbiaobiao风（`.kilo/styles/sanbiaobiao.md`）✨ 新增
 - **核心人格**：看透内容产业规律的媒体老兵
 - **招牌动作**：反常识开场、具体化对比、知识结构决定论
 - **特色表达**："喂,等等,不对劲啊"、一手资料vs二道贩子、鼻子上长了个洋鸡蛋
@@ -953,27 +986,42 @@ Claude 会：
 
 ## 📖 详细文档
 
-- [协作写作工作流快速参考](docs/WORKFLOW_QUICK_REFERENCE.md) ⭐ 新增
-- [Skills 更新总结](docs/SKILLS_UPDATE_SUMMARY.md) ⭐ 新增
+- [多工具配置同步指南](SYNC.md) ⭐ 新增（Kilo / Trae / Claude Code 三端兼容）
+- [协作写作工作流快速参考](docs/WORKFLOW_QUICK_REFERENCE.md)
+- [Skills 更新总结](docs/SKILLS_UPDATE_SUMMARY.md)
 - [DeepSeek API 配置指南](docs/DEEPSEEK_SETUP.md) ⭐ 推荐
-- [Skills 开发指南](.claude/skills/)
-- [风格建模教程](.claude/skills/风格建模/SKILL.md)
+- [Skills 开发指南](.kilo/skill/)
+- [风格建模教程](.kilo/skill/风格建模/SKILL.md)
 - [常见问题 FAQ](docs/FAQ.md)
 - [项目结构说明](docs/PROJECT_STRUCTURE.md)
 
 ## 🛠️ 高级配置
 
+### 配置同步（多工具用户必读）
+
+本项目以 `.kilo/` 为唯一数据源，通过同步脚本分发到 `.claude/` 和 `.trae/`：
+
+```bash
+# 修改 .kilo/ 下的文件后，运行同步
+python scripts/sync_config.py
+
+# 预览模式
+python scripts/sync_config.py --dry-run
+```
+
+> 详见 [SYNC.md](SYNC.md) 了解完整的同步机制和目录映射。
+
 ### 自定义反AI规则
 
-编辑 `.claude/skills/写作执行/SKILL.md` 中的"反AI写作技巧"部分，添加你自己的规则。
+编辑 `.kilo/agent/writing-executor.md` 中的"反AI写作技巧"部分，添加你自己的规则。修改后运行 `python scripts/sync_config.py` 同步。
 
 ### 调整字数控制精度
 
-编辑 `.claude/skills/写作执行/SKILL.md` 中的"字数控制"部分，修改允许范围（默认±20%）。
+编辑 `.kilo/agent/writing-executor.md` 中的"字数控制"部分，修改允许范围（默认±20%）。修改后运行 `python scripts/sync_config.py` 同步。
 
 ### 自定义工作流阶段
 
-编辑 `.claude/skills/工作流导演/SKILL.md`，可以调整协作模式的阶段顺序或跳过某些阶段。
+编辑 `.kilo/skill/工作流导演/SKILL.md`，可以调整协作模式的阶段顺序或跳过某些阶段。修改后运行 `python scripts/sync_config.py` 同步。
 
 ## 🤝 贡献指南
 

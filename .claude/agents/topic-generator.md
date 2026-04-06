@@ -1,7 +1,7 @@
 ---
-name: topic-generator
+name: (topic
 description: 选题生成器。当用户没有写作灵感时，从热点、个人资产、竞品分析三个维度生成候选选题。由工作流导演在 Stage 0a 显式调用。
-tools: Read, Write, Bash, Glob, Grep, WebSearch
+tools: Read, Write, Bash, Glob, Grep
 model: sonnet
 ---
 

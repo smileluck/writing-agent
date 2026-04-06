@@ -1,7 +1,7 @@
 ---
-name: position-engine
+name: (position
 description: 立场引擎专家。在核心主题确定后，为文章强制设定无法被轻易反驳但具有强立场的“牙齿”，解决文章没牙的问题。由工作流导演在 Stage 1.5 显式调用。
-tools: Read, Write, Bash, Glob
+tools: Read, Write, Bash, Glob, Grep
 model: sonnet
 ---
 

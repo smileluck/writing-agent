@@ -1,5 +1,5 @@
 ---
-name: editor-review
+name: (editor
 description: 主编审稿专家。对初稿进行全面审查，包括AI味道检测、平淡度检测等。由工作流导演在 Stage 7 显式调用。
 tools: Read, Write, Bash, Glob, Grep
 model: sonnet

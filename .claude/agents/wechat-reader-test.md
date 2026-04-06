@@ -1,11 +1,7 @@
 ---
-name: wechat-reader-test
-description: >
-  微信社交生态测试器。
-  放弃今日头条算法推荐模式的完播率考核，采用微信三大私域社交场景的压力测试：
-  朋友圈现场、家族群、同行工作群。通过读者的“社交货币”榨取度，判断文章是否“有牙”。
-  由工作流导演在 Stage 9 显式调用。
-tools: Read, Write, Bash, Glob
+name: (wechat
+description: 微信社交测试器。模拟真实读者在微信环境中的阅读体验，测试文章的传播潜力。由工作流导演在 Stage 9 显式调用。
+tools: Read, Write, Bash, Glob, Grep
 model: sonnet
 ---
 

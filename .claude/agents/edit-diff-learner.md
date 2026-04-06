@@ -28,7 +28,7 @@ model: sonnet
 在 `articles/[项目名]/` 目录下：
 
 1. **初稿（基线）**：找到 `draft_v1.md`——这是 AI 最原始的产物。
-2. **定稿（终点）**：找到目录中最新的定稿文件。按以下优先级判断：
+2. **定稿（终点）**：优先读取 `run_manifest.json` 中的 `clean_source_file` 或 `latest_body_file`；如果没有，再按以下优先级判断：
    - 文件名含 `final` 的（如 `draft_final.md`）
    - 文件名含 `humanized` 的（如 `draft_v4_humanized.md`）
    - 文件名含 `最终稿` 的
@@ -40,6 +40,7 @@ model: sonnet
 
 ```bash
 ls articles/[项目名]/draft*.md
+cat articles/[项目名]/run_manifest.json  # 如存在，优先读取
 ```
 
 **筛选规则**：

@@ -10,14 +10,17 @@
 articles/
 ├── [文章标题1]/
 │   ├── 01_theme.md              # Stage 1: 主题与读者
-│   ├── 02_cases.md              # Stage 2: 案例库
+│   ├── 01b_position.md          # Stage 1.5: 立场定调
+│   ├── 02_scar_tissue.md        # Stage 2: 伤疤素材库
 │   ├── 03_outline.md            # Stage 3: 大纲
-│   ├── 04_empathy_map.md        # Stage 4: 共情地图
+│   ├── 04_share_map.md          # Stage 4: 分享触点地图
 │   ├── 05_concrete_library.md   # Stage 5: 具象化库
+│   ├── 05c_opening_hook.md      # Stage 5.8: 锁定开头
 │   ├── draft_v1.md              # Stage 6: 初稿
 │   ├── draft_v1_notes.md        # Stage 6: 初稿内部备注
 │   ├── draft_v2.md              # Stage 7: 修订稿
 │   ├── draft_v2_notes.md        # Stage 7: 修订稿内部备注
+│   ├── run_manifest.json        # 当前正文来源与流程状态
 │   ├── draft_最终稿.md          # 最终版本
 │   ├── changelog.md             # 变更记录
 │   └── sources.md               # 引用来源
@@ -35,10 +38,12 @@ articles/
 | 文件名 | 阶段 | 说明 |
 |-------|------|------|
 | `01_theme.md` | Stage 1 | 主题、观点、读者画像、目标字数 |
-| `02_cases.md` | Stage 2 | 硬核数据、典型案例、生活化案例 |
+| `01b_position.md` | Stage 1.5 | 立场、判断边界、核心咬合点 |
+| `02_scar_tissue.md` | Stage 2 | 场景、代价、细节、证据 |
 | `03_outline.md` | Stage 3 | 大纲、段落功能标注、字数预估 |
-| `04_empathy_map.md` | Stage 4 | 读者心理路径、共鸣点/破防点 |
+| `04_share_map.md` | Stage 4 | 分享触点、共鸣点、破防点 |
 | `05_concrete_library.md` | Stage 5 | 类比库、画面库、行动库 |
+| `05c_opening_hook.md` | Stage 5.8 | 用户锁定的开头钩子 |
 
 ### 版本文件
 
@@ -49,6 +54,7 @@ articles/
 | `draft_v2.md` | 修订稿（Stage 7） |
 | `draft_v2_notes.md` | 修订稿内部备注（修改记录、自检、遗留问题） |
 | `draft_v3.md` | 再修订（如有） |
+| `run_manifest.json` | 当前正文来源、备注文件、状态、clean 来源 |
 | `draft_最终稿.md` | 用户确认的最终版本 |
 
 ### 辅助文件
@@ -75,14 +81,15 @@ AI：
 
 AI：
 项目：35岁程序员危机
-进度：[███░░░░] 42% (3/7)
+进度：Stage 3 已完成，等待用户确认
 
 已完成：
 ✅ 01_theme.md
-✅ 02_cases.md
+✅ 01b_position.md
+✅ 02_scar_tissue.md
 ✅ 03_outline.md
 
-下一步：04_empathy_map.md
+下一步：04_share_map.md
 ```
 
 ### 导出最终稿
@@ -98,8 +105,10 @@ AI：
 1. **不要手动修改阶段产物文件**：这些文件由 Skills 自动生成，手动修改可能导致流程错乱
 2. **可以手动修改草稿正文文件**：`draft_v1.md` 等文件可以手动编辑，然后告诉 AI "基于这个版本继续修改"
 3. **备注请写进同名 `_notes.md`**：不要再把字数统计、修改记录写回正文文件
-4. **定期备份**：重要文章建议定期备份整个项目文件夹
-5. **版本管理**：建议使用 Git 管理 articles 目录，方便追踪变更
+4. **维护 `run_manifest.json`**：新流程应把当前正文来源、备注文件和状态写进去
+5. **最终复制请用 `_clean.txt`**：它是发布出口，不是正文源文件
+6. **定期备份**：重要文章建议定期备份整个项目文件夹
+7. **版本管理**：建议使用 Git 管理 articles 目录，方便追踪变更
 
 ## 清理建议
 

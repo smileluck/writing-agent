@@ -965,11 +965,11 @@ Claude 会：
 
 ### 自定义反AI规则
 
-编辑 `.claude/skills/写作执行/SKILL.md` 中的"反AI写作技巧"部分，添加你自己的规则。
+编辑 `.claude/agents/writing-executor.md` 中的"反AI写作规则"部分，添加你自己的规则。
 
 ### 调整字数控制精度
 
-编辑 `.claude/skills/写作执行/SKILL.md` 中的"字数控制"部分，修改允许范围（默认±20%）。
+编辑 `.claude/agents/writing-executor.md` 中的"字数控制"部分，修改允许范围（默认±20%）。
 
 ### 自定义工作流阶段
 
@@ -989,13 +989,11 @@ Claude 会：
 
 查看 [CHANGELOG.md](CHANGELOG.md) 了解版本历史。
 
-**最新版本 v0.2.0 (2025-12-29)**
-- ✨ 风格建模升级至 v3.0（15维度）
-- ✨ 新增协作写作工作流（8阶段）
-- ✨ 新增标题设计师 Skill
-- ✨ 新增九边风、墨水怪风两套风格配方
-- 🔧 强制模式选择机制
-- 🔧 子 Skill 权限调整
+**当前主线版本：v0.7.6**
+- 协作写作流程已切换到 `collab-v2`
+- 新流程使用 `01b_position.md`、`02_scar_tissue.md`、`04_share_map.md`、`05c_opening_hook.md`
+- 正文与内部备注已物理分离为 `draft_v*.md` 与 `draft_v*_notes.md`
+- 最终可复制粘贴出口仍为 `_clean.txt`
 
 ## 📄 许可证
 

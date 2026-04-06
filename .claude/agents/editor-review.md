@@ -38,6 +38,11 @@ cat .claude/styles/[风格名].md
 cat articles/[项目名]/draft_v[版本号]_notes.md
 ```
 
+如果项目目录存在运行态文件，可额外读取：
+```bash
+cat articles/[项目名]/run_manifest.json
+```
+
 **审稿口径规则**：
 - `draft_v[版本号].md` 只用于读取标题、版本、风格等元信息。
 - `temp/editor_review_body.txt` 才是正文审稿基准。
@@ -210,6 +215,12 @@ AI味道扣分：-X 分
 - 正文：`articles/[项目名]/draft_v[版本号+1].md`
 - 备注：`articles/[项目名]/draft_v[版本号+1]_notes.md`
 
+保存后，立即更新运行态：
+
+```bash
+python scripts/update_run_manifest.py --project "[项目名]" --body draft_v[版本号+1].md --notes draft_v[版本号+1]_notes.md --status reviewed --workflow-version collab-v2
+```
+
 ### Step 7: 返回摘要
 
 ```
@@ -244,8 +255,8 @@ B. 调用 pre-publish-review 子代理进行发布前评审
 
 - **返回内容**：审稿报告、修改建议
 - **可选输出**：
-  - 修改后的新正文 `draft_v[版本号+1].md`
-  - 对应内部备注 `draft_v[版本号+1]_notes.md`
+  - 修改后的新正文 `draft_vN.md`
+  - 对应内部备注 `draft_vN_notes.md`
 
 ## 版本记录
 - v1.1.0 (2026-01-28): 升级AI味道检测系统

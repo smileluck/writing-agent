@@ -1,7 +1,7 @@
 """
 auto_clean_hook.py - 自动生成纯净版的 Hook 脚本
 触发时机：由 Claude Code Hook 在 Subagent 结束时自动调用
-功能：扫描 articles/ 目录，找到最近一次被修改的定稿文件，自动生成 _clean.txt
+功能：优先根据显式正文来源生成 _clean.txt，最后才回退到历史兼容逻辑
 """
 
 import os
@@ -13,6 +13,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).parent.parent
 ARTICLES_DIR = PROJECT_ROOT / 'articles'
 GENERATE_CLEAN = PROJECT_ROOT / 'scripts' / 'generate_clean.py'
+MANIFEST_NAME = 'run_manifest.json'
 
 
 def find_latest_draft():
@@ -51,6 +52,73 @@ def find_latest_draft():
     return candidates[0]
 
 
+def _normalize_candidate(path_value, base_dir: Path | None = None):
+    if not path_value:
+        return None
+
+    candidate = Path(path_value)
+    if not candidate.is_absolute():
+        if base_dir is not None:
+            candidate = base_dir / candidate
+        else:
+            candidate = PROJECT_ROOT / candidate
+    candidate = candidate.resolve()
+
+    if not candidate.exists():
+        return None
+    if candidate.name.lower().endswith('_notes.md'):
+        return None
+    return candidate
+
+
+def find_latest_manifest():
+    manifests = list(ARTICLES_DIR.glob(f'*/{MANIFEST_NAME}'))
+    if not manifests:
+        return None
+    manifests.sort(key=lambda f: f.stat().st_mtime, reverse=True)
+    return manifests[0]
+
+
+def resolve_clean_source_from_manifest(manifest_path: Path):
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
+    except Exception:
+        return None
+
+    project_dir = manifest_path.parent
+    for key in ('clean_source_file', 'latest_body_file'):
+        resolved = _normalize_candidate(manifest.get(key), base_dir=project_dir)
+        if resolved is not None:
+            return resolved
+    return None
+
+
+def resolve_clean_source(event_data: dict):
+    direct_keys = ('clean_source_file', 'body_file', 'file_path', 'path')
+    for key in direct_keys:
+        resolved = _normalize_candidate(event_data.get(key))
+        if resolved is not None:
+            return resolved
+
+    project_dir = event_data.get('project_dir')
+    if project_dir:
+        project_manifest = _normalize_candidate(project_dir, base_dir=ARTICLES_DIR)
+        if project_manifest is not None and project_manifest.is_dir():
+            manifest_path = project_manifest / MANIFEST_NAME
+            if manifest_path.exists():
+                resolved = resolve_clean_source_from_manifest(manifest_path)
+                if resolved is not None:
+                    return resolved
+
+    latest_manifest = find_latest_manifest()
+    if latest_manifest is not None:
+        resolved = resolve_clean_source_from_manifest(latest_manifest)
+        if resolved is not None:
+            return resolved
+
+    return find_latest_draft()
+
+
 def has_clean_version(draft_path: Path) -> bool:
     """检查是否已经有对应的 _clean.txt，且比原稿更新"""
     clean_path = draft_path.parent / (draft_path.stem + '_clean.txt')
@@ -67,8 +135,8 @@ def main():
     except Exception:
         event_data = {}
 
-    # 找到最新的定稿文件
-    latest_draft = find_latest_draft()
+    # 优先根据显式路径 / run_manifest.json 找到正文来源
+    latest_draft = resolve_clean_source(event_data)
 
     if latest_draft is None:
         # 没有找到定稿文件，静默退出

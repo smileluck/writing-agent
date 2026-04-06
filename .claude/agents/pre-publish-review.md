@@ -25,6 +25,8 @@ model: sonnet
 ```bash
 cat articles/[项目名]/draft_v[最新版本号].md
 python scripts/generate_clean.py --stats articles/[项目名]/draft_v[最新版本号].md
+python scripts/generate_clean.py --stdout articles/[项目名]/draft_v[最新版本号].md > temp/pre_publish_review_body.txt
+cat temp/pre_publish_review_body.txt
 ```
 
 如果存在同名备注文件，可额外读取：
@@ -34,7 +36,7 @@ cat articles/[项目名]/draft_v[最新版本号]_notes.md
 ```
 
 **口径规则**：
-- 发布判断只看正文 `draft_v[最新版本号].md`。
+- 发布判断只看清洗后的正文 `temp/pre_publish_review_body.txt`。
 - `_notes.md` 仅作为修改背景参考，不能算进字数，也不能拿来代替正文质量。
 
 ### Step 2: 发布前5问评审
@@ -179,6 +181,8 @@ cat articles/[项目名]/draft_v[最新版本号]_notes.md
 
 ### Step 4: 生成评审报告
 
+**文件输出**：`articles/[项目名]/pre_publish_review.md`
+
 ```
 ╔═══════════════════════════════════════════════════════════════╗
 ║                                                               ║
@@ -320,6 +324,7 @@ E. ❓ 对某个修改建议有疑问（请说明）
 1. 逐项执行修改
 2. 正文保存为新版本 `draft_v[N+1].md`
 3. 修改说明保存为 `draft_v[N+1]_notes.md`
+4. 运行 `python scripts/update_run_manifest.py --project "[项目名]" --body draft_v[N+1].md --notes draft_v[N+1]_notes.md --status pre_publish_revised --workflow-version collab-v2`
 4. 展示修改对比
 5. 返回摘要
 
@@ -339,7 +344,9 @@ E. ❓ 对某个修改建议有疑问（请说明）
 - 新版本：draft_v[N+1].md
 - 备注文件：draft_v[N+1]_notes.md
 
-建议下一步：调用 toutiao-reader-test 子代理进行读者模拟测试
+📁 评审报告：pre_publish_review.md
+
+建议下一步：调用 wechat-reader-test 子代理进行读者模拟测试
 ```
 
 ---

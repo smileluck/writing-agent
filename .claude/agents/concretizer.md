@@ -21,8 +21,8 @@ model: sonnet
 **必须执行**：
 
 ```bash
-cat articles/[项目名]/03_outline.md      # 获取大纲
-cat articles/[项目名]/04_empathy_map.md  # 获取共情地图
+cat articles/[项目名]/03_outline.md    # 获取大纲
+cat articles/[项目名]/04_share_map.md  # 获取社交分享地图
 ```
 
 ### Step 2: 扫描抽象词汇
@@ -133,7 +133,7 @@ cat articles/[项目名]/04_empathy_map.md  # 获取共情地图
 ```
 使用 concretizer 子代理来进行具象化设计。
 项目名称：[项目名]
-请先读取 articles/[项目名]/03_outline.md 和 04_empathy_map.md
+请先读取 articles/[项目名]/03_outline.md 和 04_share_map.md
 ```
 
 ## 输出规范

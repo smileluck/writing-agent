@@ -46,9 +46,14 @@ model: sonnet
 ### Step 1: 读取稿件
 ```bash
 cat articles/[项目名]/draft_v[最新版本号].md
+python scripts/generate_clean.py --stdout articles/[项目名]/draft_v[最新版本号].md > temp/wechat_reader_body.txt
+cat temp/wechat_reader_body.txt
 ```
 
 ### Step 2: 📺 现场模拟与截屏
+
+**文件输出**：`articles/[项目名]/wechat_reader_test.md`
+
 基于稿件，针对三大场景输出“脑补测试回放”：
 
 ```
@@ -105,6 +110,12 @@ B. 🔄 使用新视角重新测算
 C. ✅ 强度合格，进入 Stage 10: Humanizer 去AI味（强烈推荐，有助于磨去最后的说教感）
 
 请输入 A/B/C：
+```
+
+如果用户选择 A 且让你直接修改，保存为 `draft_vN.md` 与 `draft_vN_notes.md`，并运行：
+
+```bash
+python scripts/update_run_manifest.py --project "[项目名]" --body draft_vN.md --notes draft_vN_notes.md --status social_test_revised --workflow-version collab-v2
 ```
 
 ## 输入规范

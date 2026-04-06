@@ -3,7 +3,11 @@
   "version": "0.7.6",
   "type": "module",
   "scripts": {
-    "generate-image": "tsx scripts/generate_image.ts"
+    "generate-image": "tsx scripts/generate_image.ts",
+    "validate:workflow": "python scripts/validate_workflow.py",
+    "check:docs": "python scripts/validate_workflow.py --targets docs",
+    "test:py": "python -m unittest discover -s tests -p \"test_*.py\"",
+    "check:scripts": "python -m py_compile scripts/generate_clean.py scripts/auto_clean_hook.py scripts/split_draft_notes.py scripts/update_run_manifest.py scripts/validate_workflow.py"
   },
   "dependencies": {
     "openai": "^4.0.0",

@@ -32,6 +32,8 @@ def find_latest_draft():
         # 在项目目录中查找可能是定稿的文件
         for f in project_dir.glob('*.md'):
             name_lower = f.name.lower()
+            if name_lower.endswith('_notes.md'):
+                continue
             # 匹配这些模式的文件被认为是定稿候选
             is_final = any(keyword in name_lower for keyword in [
                 'final',        # draft_final.md

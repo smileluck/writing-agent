@@ -22,6 +22,9 @@ model: sonnet
 
 ```bash
 cat articles/[项目名]/draft_v[版本号].md
+python scripts/generate_clean.py --stats articles/[项目名]/draft_v[版本号].md
+python scripts/generate_clean.py --stdout articles/[项目名]/draft_v[版本号].md > temp/editor_review_body.txt
+cat temp/editor_review_body.txt
 cat articles/[项目名]/01_theme.md  # 获取风格要求
 ```
 
@@ -29,6 +32,18 @@ cat articles/[项目名]/01_theme.md  # 获取风格要求
 ```bash
 cat .claude/styles/[风格名].md
 ```
+
+如果存在同名备注文件，可额外读取：
+```bash
+cat articles/[项目名]/draft_v[版本号]_notes.md
+```
+
+**审稿口径规则**：
+- `draft_v[版本号].md` 只用于读取标题、版本、风格等元信息。
+- `temp/editor_review_body.txt` 才是正文审稿基准。
+- `draft_v[版本号]_notes.md` 仅可作为作者自检和修改背景参考，绝不能当正文内容引用。
+- 所有字数、结构、AI 味、平淡度判断，都必须以清洗后的正文为准。
+- 头部元数据、分割线，以及任何 `_notes.md` 内容，一律不得纳入总字数和正文问题判断。
 
 ### Step 2: AI味道检测 ⭐⭐⭐⭐⭐
 
@@ -104,7 +119,7 @@ cat .claude/styles/[风格名].md
 【文章信息】
 - 标题：[标题]
 - 版本：v[版本号]
-- 字数：[字数]
+- 字数：[正文字符数]
 - 风格：[风格名称]
 
 ═══════════════════════════════════════════════════
@@ -191,7 +206,9 @@ AI味道扣分：-X 分
 
 如果用户同意，按优先级修改并保存新版本：
 
-**文件路径**：`articles/[项目名]/draft_v[版本号+1].md`
+**文件路径**：
+- 正文：`articles/[项目名]/draft_v[版本号+1].md`
+- 备注：`articles/[项目名]/draft_v[版本号+1]_notes.md`
 
 ### Step 7: 返回摘要
 
@@ -226,7 +243,9 @@ B. 调用 pre-publish-review 子代理进行发布前评审
 ## 输出规范
 
 - **返回内容**：审稿报告、修改建议
-- **可选输出**：修改后的新版本 `draft_v[版本号+1].md`
+- **可选输出**：
+  - 修改后的新正文 `draft_v[版本号+1].md`
+  - 对应内部备注 `draft_v[版本号+1]_notes.md`
 
 ## 版本记录
 - v1.1.0 (2026-01-28): 升级AI味道检测系统

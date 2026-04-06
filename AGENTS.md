@@ -19,10 +19,7 @@
 
 | 目录 | 用途 |
 |------|------|
-| `.kilo/skill/` | Kilo 格式技能（唯一源文件） |
-| `.kilo/agent/` | Kilo 格式子代理 |
-| `.kilo/styles/` | 风格库文件 |
-| `.trae/skills/` | Trae 格式技能（兼容保留） |
-| `.claude/skills/` | Claude Code 格式技能（兼容保留） |
-| `.claude/agents/` | Claude Code 格式代理（兼容保留） |
-| `.claude/styles/` | Claude Code 风格库（兼容保留） |
+| `.kilo/skill/` | 技能（唯一源文件） |
+| `.kilo/agent/` | 子代理（唯一源文件） |
+| `.kilo/styles/` | 风格库（唯一源文件） |
+| `.claude/` | 仅保留 Claude Code 项目配置（settings.json） |

@@ -23,5 +23,41 @@ Thumbs.db
 
 # 依赖（如果将来添加）
 node_modules/
-docs/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+ENV/
+env/
+*.egg-info/
+dist/
+build/
+*.egg
+
+# 环境变量
 .env
+.env.local
+.env.*.local
+
+# 缓存
+.cache/
+.pytest_cache/
+.mypy_cache/
+
+# 测试覆盖率
+htmlcov/
+.coverage
+coverage.xml
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# 打包文件
+*.zip
+*.tar.gz
+*.rar

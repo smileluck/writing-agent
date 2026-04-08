@@ -20,6 +20,9 @@ def update_run_manifest(
     status: str = "drafted",
     workflow_version: str = "collab-v2",
     clean_source_file: str | None = None,
+    html_file: str | None = None,
+    html_source_file: str | None = None,
+    html_theme: str | None = None,
 ) -> dict:
     project_dir.mkdir(parents=True, exist_ok=True)
     manifest_path = project_dir / "run_manifest.json"
@@ -31,6 +34,13 @@ def update_run_manifest(
         "clean_source_file": clean_source_file or body_file,
         "status": status,
     }
+
+    if html_file:
+        manifest["latest_html_file"] = html_file
+    if html_source_file:
+        manifest["html_source_file"] = html_source_file
+    if html_theme:
+        manifest["html_theme"] = html_theme
 
     manifest_path.write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
@@ -47,6 +57,9 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--status", default="drafted", help="当前项目状态")
     parser.add_argument("--workflow-version", default="collab-v2", help="协议版本")
     parser.add_argument("--clean-source", help="显式 clean 来源文件名，默认等于 body")
+    parser.add_argument("--html", help="最新导出的 HTML 文件名")
+    parser.add_argument("--html-source", help="用于导出 HTML 的正文文件名")
+    parser.add_argument("--html-theme", help="HTML 导出使用的版式主题")
     return parser
 
 
@@ -60,6 +73,9 @@ def main() -> int:
         status=args.status,
         workflow_version=args.workflow_version,
         clean_source_file=args.clean_source,
+        html_file=args.html,
+        html_source_file=args.html_source,
+        html_theme=args.html_theme,
     )
     print(json.dumps(manifest, ensure_ascii=False, indent=2))
     return 0

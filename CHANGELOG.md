@@ -5,6 +5,17 @@ All notable changes to 写稿Agent will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.7] - 2026-04-08
+
+### Added
+- ✨ **末端 HTML 导出 (`html-exporter`)**：在最终 Markdown 定稿后新增 Stage 12.5 可选出口。用户现在除了 `_clean.txt` 纯净终稿，还可以额外获得一份可直接打开与复制的 `.html` 排版稿。
+- 🧪 **导出链路回归测试**：为 Markdown 转 HTML 导出脚本和 `run_manifest.json` 补充自动化测试，覆盖输出文件生成、备份逻辑和运行态记录。
+
+### Changed
+- 🔧 **终稿交付形态升级**：保留 `_clean.txt` 作为默认复制出口，同时正式引入 `.html` 作为可选的排版交付物，补上“从写完到可发”的最后一公里。
+- 📋 **Stage 12.5 契约收紧**：`html-exporter`、工作流导演、`collab_v2.json`、快速参考和契约文档全部对齐，不再让 HTML 导出停留在 prompt 口头层。
+- 📦 **Node 工具链补全**：将 Markdown 转 HTML 所需依赖正式纳入项目依赖与脚本入口，降低新环境首次跑通的成本。
+
 ## [0.7.6] - 2026-04-05
 
 ### Added

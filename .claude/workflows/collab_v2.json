@@ -160,6 +160,14 @@
       ]
     },
     {
+      "id": "12.5",
+      "agent": "html-exporter",
+      "optional": true,
+      "outputs": [
+        "[body].html"
+      ]
+    },
+    {
       "id": "13",
       "agent": "edit-diff-learner",
       "optional": true,

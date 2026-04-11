@@ -1,6 +1,10 @@
-# 风格名称:sanbiaobiao
+---
+author: "sanbiaobiao"
+source_count: null
+last_updated: 2026-04-11
 ---
 
+# 风格名称:sanbiaobiao
 ## 01. 作者画像与核心人格
 
 - **基础特征**: 30-40岁媒体人/评论家,文化素养较高,对互联网内容生态有深刻观察

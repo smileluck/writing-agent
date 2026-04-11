@@ -1,235 +1,158 @@
 ---
 name: web-article-extractor
-description: 使用 Chrome DevTools MCP 提取和分析网页文章内容。当用户请求获取网页内容、阅读在线文章、从网站提取文本、捕获网页快照或分析网页结构时使用。支持多种提取格式包括纯文本、HTML 和结构化内容。特别优化了微信公众号等有安全限制的网站。
+description: 使用 Chrome DevTools MCP 提取网页正文、保存 Markdown、下载文章图片或分析页面结构时调用。适用于博客、新闻站、微信公众号等文章页面；当用户要求“提取文章”“抓网页正文”“保存为 markdown”“连图片一起保存”时使用。
 ---
 
 # Web Article Extractor
 
-使用 Chrome DevTools MCP 服务器从网页中提取干净的文章内容，支持绕过常见的安全限制。
+目标很简单：**先拿到干净正文，再按用户需要决定输出成纯文本、结构化 JSON，还是 Markdown + 图片。**
 
-## 快速开始
-
-### 前置条件
+## 前置条件
 
 确保已配置 `chrome-devtools` MCP 服务器：
 
 ```bash
-# 添加 chrome-devtools 服务器（带安全绕过参数）
 claude mcp add chrome-devtools npx -y chrome-devtools-mcp@latest -- \
   --disable-blink-features=AutomationControlled \
   --disable-web-security \
   --disable-features=IsolateOrigins,site-per-process
 ```
 
-### 基本使用流程
+## 基本原则
 
-```typescript
-// 1. 获取标签页
-const context = await tabs_context_mcp({ createIfEmpty: true });
-const tabId = context.availableTabs[0].tabId;
+- 默认优先 `Readability.js`，不要一上来就手写大段选择器。
+- 用户要的是“保存为 Markdown”时，不要只返回正文字符串，直接走 Markdown 导出链路。
+- 遇到公众号、知乎这类安全限制页面，再读平台专用说明，不要把平台细节堆在主流程里。
+- 多链接批量提取时，串行处理，避免风控。
 
-// 2. 导航到目标页面
-await navigate({ tabId, url: targetUrl });
+## 选择哪条提取路径
 
-// 3. 等待页面加载
-await javascript_tool({
-  tabId,
-  action: "javascript_exec",
-  text: `new Promise(r => {
-    if (document.readyState === 'complete') r();
-    else window.addEventListener('load', r);
-  })`
-});
+### 1. 普通网页正文提取
 
-// 4. 使用 Readability 提取（推荐）
-const readabilityScript = await fs.readFile(
-  '.claude/skills/公众号文章获取/scripts/readability_extractor.js',
-  'utf8'
-);
+默认走：
 
-const result = await javascript_tool({
-  tabId,
-  action: "javascript_exec",
-  text: readabilityScript
-});
+- 脚本：`scripts/readability_extractor.js`
+- 需要细调参数时再读：
+  - [references/readability-guide.md](references/readability-guide.md)
+  - [references/config-options.md](references/config-options.md)
 
-const article = JSON.parse(result);
-```
+适用场景：
 
-## 微信公众号专用流程
+- 提取博客、新闻、专栏正文
+- 返回标题、作者、正文、图片、阅读时长等结构化信息
 
-微信公众号有多层安全防护，需要特殊处理：
+### 2. 导出为 Markdown，并尽量保留图片
 
-### 完整提取脚本
+直接走：
 
-```typescript
-async function extractWeChatArticle(articleUrl) {
-  // 1. 连接到浏览器
-  const tabs = await tabs_context_mcp({ createIfEmpty: true })
-  const tabId = tabs.availableTabs[0].tabId
+- 转换脚本：`scripts/markdown_converter.js`
+- 图片落盘脚本：`scripts/save_with_images.js`
+- 使用说明：
+  - [references/markdown_usage.md](references/markdown_usage.md)
 
-  // 2. 设置微信 User-Agent（关键步骤）
-  await javascript_tool({
-    tabId,
-    action: "javascript_exec",
-    text: `
-      Object.defineProperty(navigator, 'userAgent', {
-        get: () => 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/8.0.38(0x18002633) NetType/WIFI Language/zh_CN'
-      });
-      'User-Agent set to WeChat';
-    `
-  })
+适用场景：
 
-  // 3. 导航到文章页面
-  await navigate({ tabId, url: articleUrl })
+- 用户明确说“保存成 markdown”
+- 需要把图片下载到本地并重写 Markdown 图片路径
 
-  // 4. 等待页面加载完成
-  await javascript_tool({
-    tabId,
-    action: "javascript_exec",
-    text: `
-      await new Promise((resolve) => {
-        const check = () => {
-          const content = document.querySelector('#js_content, .rich_media_content')
-          if (content && content.innerText.length > 100) {
-            resolve()
-          } else if (document.readyState === 'complete') {
-            setTimeout(resolve, 2000)
-          } else {
-            setTimeout(check, 100)
-          }
-        }
-        check()
-      })
-      'Content loaded';
-    `
-  })
+### 3. Readability 不稳定，改走轻量提取或手工选择器
 
-  // 5. 提取文章内容
-  const article = await javascript_tool({
-    tabId,
-    action: "javascript_exec",
-    text: `
-      (() => {
-        const titleEl = document.querySelector('#activity-name, .rich_media_title')
-        const title = titleEl ? titleEl.innerText.trim() : document.title
+回退路径：
 
-        const authorEl = document.querySelector('#js_name, .rich_media_meta_text')
-        const author = authorEl ? authorEl.innerText.trim() : ''
+- 轻量提取脚本：`scripts/extract_article.js`
+- 选择器参考：
+  - [references/selector_patterns.md](references/selector_patterns.md)
+  - [references/platform-specific.md](references/platform-specific.md)
 
-        const dateEl = document.querySelector('#publish_time, .publish_time')
-        const publishTime = dateEl ? dateEl.innerText.trim() : ''
+适用场景：
 
-        const contentEl = document.querySelector('#js_content, .rich_media_content')
-        let content = ''
-        if (contentEl) {
-          const clone = contentEl.cloneNode(true)
-          clone.querySelectorAll('script, style, noscript').forEach(el => el.remove())
-          content = clone.innerText.trim()
-        }
+- 页面 DOM 很怪，Readability 抽不准
+- 需要按平台特征补自定义选择器
 
-        const images = Array.from(document.querySelectorAll('#js_content img'))
-          .map(img => img.getAttribute('data-src') || img.src)
-          .filter(src => src && !src.includes('placeholder'))
+## 标准流程
 
-        return JSON.stringify({
-          title,
-          author,
-          publishTime,
-          content,
-          images,
-          url: window.location.href,
-          wordCount: content.length
-        }, null, 2)
-      })()
-    `
-  })
+### 1. 打开页面并等待正文稳定
 
-  return JSON.parse(article)
-}
-```
+- 导航到目标 URL
+- 等页面加载完成
+- 如果正文节点迟迟不出现，额外等 2-3 秒再提取
 
-## 提取方法选择
+### 2. 先判断输出形态
 
-本技能提供三种提取方法：
+- 用户只要“看内容”：
+  - 提取正文并直接返回摘要/结构化内容
+- 用户要“保存为 Markdown”：
+  - 直接走 `markdown_converter.js` + `save_with_images.js`
+- 用户要“分析页面结构”：
+  - 先读 [references/selector_patterns.md](references/selector_patterns.md)
 
-1. **Readability.js（推荐）** - Mozilla 的成熟提取算法，处理复杂布局更准确
-   - 详细说明：[references/readability-guide.md](references/readability-guide.md)
-   - 配置选项：[references/config-options.md](references/config-options.md)
+### 3. 微信公众号特殊处理
 
-2. **简化算法** - 自定义轻量级算法，速度更快但准确度稍低
-   - 使用脚本：`scripts/extract_article.js`
+只有在目标页面确实是公众号链接时，才启用特殊处理：
 
-3. **自定义选择器** - 针对特定平台的选择器
-   - 平台指南：[references/platform-specific.md](references/platform-specific.md)
+- 优先读 [references/platform-specific.md](references/platform-specific.md)
+- 必要时模拟微信 `User-Agent`
+- 必要时追加等待逻辑，确保 `#js_content` 真正加载完成
 
-## 输出格式
+不要把公众号逻辑默认套在所有网页上。
 
-### Markdown 格式
-```markdown
-# 文章标题
+## 输出要求
 
-**作者：** 作者名称
-**发布时间：** 2024-01-15
+### 纯提取结果
 
-文章正文内容...
+至少包含：
 
----
-来源：[链接](https://example.com)
-```
+- `title`
+- `author`
+- `content`
+- `url`
+- `wordCount`
 
-### JSON 格式
-```json
-{
-  "title": "文章标题",
-  "author": "作者名称",
-  "publishDate": "2024-01-15",
-  "content": "完整文章内容...",
-  "images": ["url1", "url2"],
-  "metadata": {
-    "url": "https://example.com/article",
-    "wordCount": 1500,
-    "readTime": 5
-  }
-}
-```
+### Markdown 输出
 
-## 进阶主题
+至少包含：
 
-- **最佳实践与优化**：[references/best-practices.md](references/best-practices.md)
-- **特定平台处理**：[references/platform-specific.md](references/platform-specific.md)
-- **Readability 详解**：[references/readability-guide.md](references/readability-guide.md)
-- **配置选项**：[references/config-options.md](references/config-options.md)
+- 正文 `.md`
+- 图片资源目录或本地图片文件
+- 图片路径已回写到 Markdown
+
+## 参考资料导航
+
+- Readability 原理与限制：
+  - [references/readability-guide.md](references/readability-guide.md)
+- Readability 可调参数：
+  - [references/config-options.md](references/config-options.md)
+- 平台专用说明：
+  - [references/platform-specific.md](references/platform-specific.md)
+- Markdown 保存链路：
+  - [references/markdown_usage.md](references/markdown_usage.md)
+- 常见选择器模式：
+  - [references/selector_patterns.md](references/selector_patterns.md)
+- 实际调用示例：
+  - [references/usage_examples.md](references/usage_examples.md)
+- 提取成功率与排错：
+  - [references/best-practices.md](references/best-practices.md)
+
+## 脚本清单
+
+- `scripts/readability_extractor.js`
+  - 主提取脚本，默认入口
+- `scripts/readability_loader.js`
+  - 负责在运行时加载提取逻辑
+- `scripts/extract_article.js`
+  - 轻量回退提取器
+- `scripts/markdown_converter.js`
+  - 转成 Markdown 数据结构
+- `scripts/save_with_images.js`
+  - 下载图片并落盘
+- `scripts/Readability.js`
+  - Readability 运行库，不直接改调用方式
 
 ## 常见问题
 
-**Q: 如何处理需要登录的内容？**
-
-A: 使用已登录的浏览器实例，或者在代码中实现登录流程。
-
-**Q: 微信文章显示"请在微信中打开"？**
-
-A: 需要设置微信 User-Agent（见上面的微信专用流程）。
-
-**Q: 如何提高提取成功率？**
-
-A: 使用最新版本的 Chrome DevTools MCP，设置正确的启动参数，模拟真实浏览器行为。
-
-## 技术栈
-
-- **Chrome DevTools MCP** - 浏览器控制和页面操作
-- **Readability.js v0.6.0** - Mozilla 文章提取算法
-- **自定义提取器** - 特殊网站支持（微信、知乎等）
-
-## 版本更新
-
-### v2.0.0 (2025-12-28)
-- 升级 Readability.js 至 v0.6.0
-- 新增 isProbablyReaderable 快速预检测
-- 增强 SEO 元数据提取
-- 完善文档结构
-
-### v1.0.0 (2025-11-15)
-- 初始版本
-- 集成 Mozilla Readability.js
-- 支持微信公众号
+- 需要登录的内容：
+  - 使用已登录浏览器实例，不要假设匿名可读
+- 公众号提示“请在微信中打开”：
+  - 先读 [references/platform-specific.md](references/platform-specific.md)，不要直接硬改全局流程
+- 提取失败或内容不完整：
+  - 先读 [references/best-practices.md](references/best-practices.md)，再决定是否切换到 `extract_article.js`

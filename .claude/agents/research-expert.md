@@ -1,7 +1,7 @@
 ---
 name: research-expert
 description: 微观伤疤打捞器 (原调研专家)。深度挖掘主题背后的极度微观细节、生活伤疤与行业隐秘代价。由工作流导演在 Stage 2 显式调用。
-tools: Read, Write, Bash, Glob, WebSearch,web-search-prime
+tools: Read, Write, Bash, Glob, WebSearch
 model: sonnet
 ---
 

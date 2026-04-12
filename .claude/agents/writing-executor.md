@@ -20,11 +20,20 @@ model: sonnet
 
 **必须执行**：读取所有准备材料
 
+在真正开始读取前，先执行硬性前置校验：
+
+```bash
+python scripts/verify_required_files.py --project "[项目名]" --required 04_title.md 04_share_map.md 05_concrete_library.md 05c_opening_hook.md
+```
+
+如果脚本返回 `FAIL`，必须停止并返回导演，禁止靠会话记忆继续写作。
+
 ```bash
 cat articles/[项目名]/01_theme.md
 cat articles/[项目名]/01b_position.md
 cat articles/[项目名]/02_scar_tissue.md
 cat articles/[项目名]/03_outline.md
+cat articles/[项目名]/04_title.md
 cat articles/[项目名]/04_share_map.md
 cat articles/[项目名]/05_concrete_library.md
 cat articles/[项目名]/05c_opening_hook.md
@@ -34,6 +43,7 @@ cat articles/[项目名]/05c_opening_hook.md
 - 必须先检查 `articles/[项目名]/01_theme.md` 中的「写作风格」字段。
 - 如果风格为空、写成“待定/默认/自动选择/你来判断”，或者看不出是用户明确确认的结果，必须停止，返回导演要求用户重新选风格。
 - 允许的兜底值只有：**用户明确说“无指定风格”**。除此之外禁止自行代选。
+- `04_title.md` 如果不存在，或者没有明确的最终锁定标题，必须停止并返回导演。
 - `05c_opening_hook.md` 如果不存在，或者内容不是用户明确锁定的开头，必须停止并返回导演，不得自行补一个开头继续写。
 
 ### Step 2: 读取风格文件
@@ -238,8 +248,7 @@ python scripts/update_run_manifest.py --project "[项目名]" --body draft_v1.md
 ```
 使用 writing-executor 子代理来执行写作。
 项目名称：[项目名]
-标题：[用户选择的标题]
-请先读取 articles/[项目名]/ 下的所有准备文件。
+请先校验并读取 articles/[项目名]/ 下的所有准备文件，尤其是 04_title.md、04_share_map.md、05_concrete_library.md、05c_opening_hook.md。
 ```
 
 ## 输出规范
@@ -256,7 +265,8 @@ python scripts/update_run_manifest.py --project "[项目名]" --body draft_v1.md
 3. **必须读取风格文件**，否则风格会走样（用户明确选择“无指定风格”除外）
 4. **必须用统一脚本统计正文字数**，不能把元数据和写作备注算进去
 5. **正文和备注必须物理分文件**，禁止再把内部备注写回 `draft_v*.md`
-6. **标记待优化点**，帮助后续审稿
+6. **Stage 6 前必须通过落盘校验**，缺少 `04_title.md`、`04_share_map.md`、`05_concrete_library.md`、`05c_opening_hook.md` 任意一个都不能继续
+7. **标记待优化点**，帮助后续审稿
 
 ## 版本记录
 - v1.1.0 (2026-01-28): 新增反AI写作规则

@@ -79,6 +79,7 @@ description: |
 2. 每次调用前，先读取 `.claude/workflows/collab_v2.json`，确认当前 Stage 对应的 agent、inputs、outputs。
 3. `prompt` 里只传当前阶段必需的上下文，不要把整条工作流历史一股脑塞进去。
 4. 轻量模式只走最短链路；协作模式严格按 `collab_v2.json` 的活跃 stages 推进；选题模式完成后再切回协作模式 Stage 1。
+5. 只要当前 Stage 在 `collab_v2.json` 里声明了具体 `outputs`，就必须在展示“✅ Stage 完成”之前，先验证这些文件已经真实存在且非空。禁止把“子代理口头说已保存”当作完成。
 
 ### 最小调用模板
 
@@ -144,11 +145,24 @@ description: |
 **特别注意以下必须彻底停机的确认卡点，绝不能跳过**：
 - **Stage 1 完成后**：必须向用户展示已确认的写作风格，并等待用户明确确认后，才能进入 Stage 1.5。风格未确认时禁止推进。
 - **Stage 3 完成后**：必须向用户展示大纲，等待用户批准或提出修改。
-- **Stage 5.5 完成后**：必须向用户展示候选标题，等待用户选择。
+- **Stage 5.5 完成后**：必须向用户展示 **A-H 全部 8 个候选标题** 和前 3 推荐排序；`04_title.md` 必须已真实落盘，等待用户选择。
 - **Stage 5.8 完成后**：抛出 3 款极道开头（暴击/撕裂/冷眼），必须明确等待用户确认选用哪款（A/B/C）。
 - **Stage 7 完成后**：主编给出评审意见后，必须明确等待用户确认：“是否同意按此建议修改草稿（产出 v2），还是直接过？”
 - **Stage 9 完成后**：给用户提供 A/B/C 三个选项，明确等待用户选择。
 - **Stage 12.5 完成前**：必须明确等待用户选择是否导出 HTML，以及使用哪一套默认版式（A/B/C/D/N）。
+
+## Stage 6 前置门禁
+
+在调用 `writing-executor` 之前，必须先执行：
+
+```bash
+python scripts/verify_required_files.py --project "[项目名]" --required 04_title.md 04_share_map.md 05_concrete_library.md 05c_opening_hook.md
+```
+
+- 如果返回 `PASS`：才允许进入 Stage 6。
+- 如果返回 `FAIL`：必须停止并明确指出缺的是哪个文件，退回对应前序 Stage 处理。
+
+禁止在缺少这些文件的情况下继续写初稿。
 
 ## Stage 10: 🤖 强制去AI味处理（Humanizer）
 

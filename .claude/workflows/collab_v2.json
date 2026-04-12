@@ -85,7 +85,9 @@
         "03_outline.md",
         "01_theme.md"
       ],
-      "outputs": []
+      "outputs": [
+        "04_title.md"
+      ]
     },
     {
       "id": "5.8",
@@ -108,6 +110,7 @@
         "01b_position.md",
         "02_scar_tissue.md",
         "03_outline.md",
+        "04_title.md",
         "04_share_map.md",
         "05_concrete_library.md",
         "05c_opening_hook.md"

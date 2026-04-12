@@ -22,6 +22,14 @@ model: sonnet
 
 **必须执行**（根据可用性尽可能全部读取）：
 
+先确认前序产物已经真正落盘：
+
+```bash
+python scripts/verify_required_files.py --project "[项目名]" --required 04_share_map.md 05_concrete_library.md
+```
+
+如果校验失败，必须停止并返回导演，不得继续生成开头方案。
+
 ```bash
 cat articles/[项目名]/01b_position.md
 cat articles/[项目名]/02_scar_tissue.md
@@ -82,6 +90,15 @@ cat articles/[项目名]/04_share_map.md
 
 [用户选定/修改后的具体开头正文]
 ```
+
+保存后，**必须立刻执行**：
+
+```bash
+python scripts/verify_required_files.py --project "[项目名]" --required 05c_opening_hook.md
+```
+
+只有脚本返回 `PASS`，才允许宣称 Stage 5.8 完成。
+如果脚本返回 `FAIL`，必须停止并明确报告“05c_opening_hook.md 未真正落盘”。
 
 ## 输入规范
 

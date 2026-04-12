@@ -1,7 +1,7 @@
 ---
 name: topic-research
 description: 选题调研专家。验证选题是否值得写，提供热点扫描、爆款拆解、痛点验证和选题打分。由工作流导演在 Stage 0b 显式调用。
-tools: Read, Write, Bash, Glob, Grep, WebSearch,web-search-prime
+tools: Read, Write, Bash, Glob, Grep, WebSearch
 model: sonnet
 ---
 

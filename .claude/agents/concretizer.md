@@ -20,6 +20,14 @@ model: sonnet
 
 **必须执行**：
 
+先确认 Stage 4 产物已经真正落盘：
+
+```bash
+python scripts/verify_required_files.py --project "[项目名]" --required 04_share_map.md
+```
+
+如果校验失败，必须停止并返回导演，不得继续生成具象化库。
+
 ```bash
 cat articles/[项目名]/03_outline.md    # 获取大纲
 cat articles/[项目名]/04_share_map.md  # 获取社交分享地图
@@ -111,6 +119,17 @@ cat articles/[项目名]/04_share_map.md  # 获取社交分享地图
 写作时，对照此文件，将抽象表达替换为具象化表达。
 每个抽象概念只需具象化一次，避免啰嗦。
 ```
+
+### Step 5.5: 保存后立即验文件
+
+生成内容后，**必须先真实写入** `articles/[项目名]/05_concrete_library.md`，然后立刻执行：
+
+```bash
+python scripts/verify_required_files.py --project "[项目名]" --required 05_concrete_library.md
+```
+
+只有脚本返回 `PASS`，才允许宣称 Stage 5 完成。
+如果脚本返回 `FAIL`，必须停止并明确报告“05_concrete_library.md 未真正落盘”。
 
 ### Step 6: 返回摘要
 

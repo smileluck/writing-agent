@@ -92,6 +92,17 @@ cat articles/[项目名]/03_outline.md     # 获取大纲结构
 - **防御性补丁**：[建议在某段加上一句什么话来堵住喷子的嘴，防止不想卷入骂战的用户不敢转发]
 ```
 
+### Step 4.5: 保存后立即验文件
+
+生成内容后，**必须先真实写入** `articles/[项目名]/04_share_map.md`，然后立刻执行：
+
+```bash
+python scripts/verify_required_files.py --project "[项目名]" --required 04_share_map.md
+```
+
+只有脚本返回 `PASS`，才允许宣称 Stage 4 完成。
+如果脚本返回 `FAIL`，必须停止并明确报告“04_share_map.md 未真正落盘”，禁止口头声称已保存。
+
 ### Step 5: 返回摘要
 
 ```

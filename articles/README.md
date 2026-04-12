@@ -13,6 +13,7 @@ articles/
 │   ├── 01b_position.md          # Stage 1.5: 立场定调
 │   ├── 02_scar_tissue.md        # Stage 2: 伤疤素材库
 │   ├── 03_outline.md            # Stage 3: 大纲
+│   ├── 04_title.md              # Stage 5.5: 标题候选与锁定结果
 │   ├── 04_share_map.md          # Stage 4: 分享触点地图
 │   ├── 05_concrete_library.md   # Stage 5: 具象化库
 │   ├── 05c_opening_hook.md      # Stage 5.8: 锁定开头
@@ -41,6 +42,7 @@ articles/
 | `01b_position.md` | Stage 1.5 | 立场、判断边界、核心咬合点 |
 | `02_scar_tissue.md` | Stage 2 | 场景、代价、细节、证据 |
 | `03_outline.md` | Stage 3 | 大纲、段落功能标注、字数预估 |
+| `04_title.md` | Stage 5.5 | 8 个候选标题、推荐排序、最终锁定标题 |
 | `04_share_map.md` | Stage 4 | 分享触点、共鸣点、破防点 |
 | `05_concrete_library.md` | Stage 5 | 类比库、画面库、行动库 |
 | `05c_opening_hook.md` | Stage 5.8 | 用户锁定的开头钩子 |

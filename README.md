@@ -1,5 +1,9 @@
 # 写稿Agent v0.7.7
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+[![Desktop App](https://img.shields.io/badge/Desktop%20App-Windows%20Preview-2f6f4f)](https://github.com/dongbeixiaohuo/writing-agent/releases/tag/app-preview-0.1.0)
+[![Writing Workflow](https://img.shields.io/badge/Writing%20Workflow-Stage%20Driven-1f6feb)](https://github.com/dongbeixiaohuo/writing-agent)
+
 把写作从“一次性吐全文”，改成“分阶段策划、审稿、去 AI 味、导出终稿”的流水线。
 
 你拿到的不只是文章，更是一套能反复复用、能中断继续、能回头复盘的写作生产线。

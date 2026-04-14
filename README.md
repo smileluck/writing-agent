@@ -18,8 +18,24 @@
 
 ---
 
+## 桌面预览版
+
+现在可以直接下载 `Writing Agent App` 的 Windows 预览版：
+
+- [下载 Writing Agent App 预览版 0.1.0](https://github.com/dongbeixiaohuo/writing-agent/releases/download/app-preview-0.1.0/Writing.Agent.App_0.1.0_x64-setup.exe)
+
+桌面应用源码位于：
+
+- `writing-agent-app/`
+
+如果你只想直接使用桌面应用，优先下载上面的安装包。  
+如果你想查看或参与源码开发，可以直接看仓库里的 `writing-agent-app/` 目录。
+
+---
+
 ## 快速入口
 
+- 下载桌面应用：[桌面预览版](#桌面预览版)
 - 先看完整样本：[老板的AI战略骗局 Demo](#完整-demo老板的ai战略骗局)
 - 再看当前版本：[最新更新](#最新更新)
 - 先判断模型成本：[模型与 Coding Plan](#模型与-coding-plan)

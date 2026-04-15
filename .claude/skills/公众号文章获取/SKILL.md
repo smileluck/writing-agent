@@ -57,6 +57,11 @@ claude mcp add chrome-devtools npx -y chrome-devtools-mcp@latest -- \
 
 ### 3. Readability 不稳定，改走轻量提取或手工选择器
 
+**何时切换到回退路径**：
+- Readability 返回的 `content` 字段为空或字数 < 100
+- 提取的正文明显不完整（如只有开头几段，但页面实际有完整文章）
+- 页面结构特殊（如单页应用、动态加载内容未被捕获）
+
 回退路径：
 
 - 轻量提取脚本：`scripts/extract_article.js`
@@ -79,14 +84,29 @@ claude mcp add chrome-devtools npx -y chrome-devtools-mcp@latest -- \
 
 ### 2. 先判断输出形态
 
-- 用户只要“看内容”：
+- 用户只要”看内容”：
   - 提取正文并直接返回摘要/结构化内容
-- 用户要“保存为 Markdown”：
+- 用户要”保存为 Markdown”：
   - 直接走 `markdown_converter.js` + `save_with_images.js`
-- 用户要“分析页面结构”：
+  - 调用示例：
+    ```javascript
+    // 先转换为 Markdown 结构
+    const mdData = await markdownConverter(extractedContent);
+    // 下载图片并更新路径
+    await saveWithImages(mdData, { outputDir: 'docs/', downloadImages: true });
+    ```
+- 用户要”分析页面结构”：
   - 先读 [references/selector_patterns.md](references/selector_patterns.md)
 
-### 3. 微信公众号特殊处理
+### 3. 完成后输出确认
+
+提取完成后，必须向用户明确报告：
+- 提取的文章标题
+- 字数统计
+- 保存路径（如果有落盘）
+- 是否成功下载图片（如果有）
+
+### 4. 微信公众号特殊处理
 
 只有在目标页面确实是公众号链接时，才启用特殊处理：
 

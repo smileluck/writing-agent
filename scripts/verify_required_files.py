@@ -6,11 +6,42 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from pathlib import Path
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 ARTICLES_DIR = PROJECT_ROOT / "articles"
+
+
+def title_file_is_locked(content: str) -> bool:
+    lines = content.splitlines()
+
+    for raw_line in lines:
+        normalized = raw_line.strip().replace("**", "")
+        if "选择状态" in normalized and "待定" in normalized:
+            return False
+        if "最终标题" in normalized and ("：" in normalized or ":" in normalized):
+            value = re.split(r"[:：]", normalized, maxsplit=1)[1].strip().strip("*").strip()
+            if not value or value == "待定":
+                return False
+            return True
+
+    for index, raw_line in enumerate(lines):
+        if "## 最终标题" not in raw_line:
+            continue
+
+        for candidate in lines[index + 1 : index + 7]:
+            stripped = candidate.strip()
+            if not stripped:
+                continue
+            normalized = stripped.replace("**", "")
+            if "待定" in normalized:
+                return False
+            if "「" in normalized and "」" in normalized:
+                return True
+
+    return False
 
 
 def find_file_issues(project_dir: Path, required_files: list[str]) -> list[dict[str, str]]:
@@ -22,8 +53,17 @@ def find_file_issues(project_dir: Path, required_files: list[str]) -> list[dict[
             issues.append({"file": file_name, "reason": "missing"})
             continue
 
-        if not target.is_file() or not target.read_text(encoding="utf-8").strip():
+        if not target.is_file():
             issues.append({"file": file_name, "reason": "empty"})
+            continue
+
+        content = target.read_text(encoding="utf-8")
+        if not content.strip():
+            issues.append({"file": file_name, "reason": "empty"})
+            continue
+
+        if file_name == "04_title.md" and not title_file_is_locked(content):
+            issues.append({"file": file_name, "reason": "unlocked_title"})
 
     return issues
 
@@ -55,7 +95,7 @@ def main() -> int:
 
     if issues:
         print(json.dumps({"project_dir": str(project_dir), "issues": issues}, ensure_ascii=False, indent=2))
-        print("FAIL: 存在缺失或空文件")
+        print("FAIL: 存在缺失、空文件或未锁定标题")
         return 1
 
     print(

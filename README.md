@@ -227,6 +227,82 @@ demo/老板的AI战略骗局/humanized_final_clean.txt
 
 - [给新手的完整安装与使用说明](#给新手的完整安装与使用说明)
 
+### 现在有两种交付路径
+
+从这一版开始，这个项目同时支持两种使用方式：
+
+| 方式 | 适合谁 | 运行根目录 |
+|------|------|------|
+| `git clone` 仓库 | 想直接拿完整项目、看 demo、参与开发的人 | 仓库根目录 |
+| `plugin` 安装 | 不想先 clone 仓库，只想在任意工作目录里使用工作流的人 | 你的当前工作目录 |
+
+两条路径的底层运行时现在共用一套事实源：
+
+- `claude-runtime/`
+
+然后再分别同步到：
+
+- 项目兼容层：`.claude/`
+- 插件目录：`plugins/writing-agent/`
+
+### 如果你是 `git clone` 用户
+
+用法不变：
+
+1. clone 仓库
+2. 在仓库根目录启动 `claude`
+3. 继续按项目内 `.claude/`、`scripts/`、`demo/` 这套方式使用
+
+### 如果你是 `plugin` 用户
+
+插件模式的目标是：
+
+- 安装插件后，不需要先 clone 这个仓库
+- 在任意正常工作目录启动 `claude`
+- 插件会通过工作区自举脚本补齐最小运行目录
+
+当前仓库里已经包含插件骨架：
+
+- `plugins/writing-agent/`
+- `.claude-plugin/marketplace.json`
+
+安装方式只保留最简单这一条。
+
+假设仓库地址就是：
+
+- `dongbeixiaohuo/writing-agent`
+
+那用户只需要执行：
+
+#### 1. 添加 marketplace
+
+```bash
+claude plugin marketplace add dongbeixiaohuo/writing-agent
+```
+
+#### 2. 安装插件
+
+```bash
+claude plugin install writing-agent@writing-agent-marketplace
+```
+
+#### 3. 重新加载插件
+
+```text
+/reload-plugins
+```
+
+装完之后，在你想写文章的目录里启动 `claude` 就可以了。
+
+插件第一次进入一个空工作目录时，会自动补齐最小运行结构：
+
+- `articles/`
+- `.claude/styles/`
+- `.claude/workflows/`
+- `scripts/`
+
+这意味着 plugin 用户不需要 clone 完整仓库，也能让工作流里那些依赖 `.claude/` 和 `scripts/` 的阶段继续正常工作。
+
 ---
 
 ## 给新手的完整安装与使用说明
@@ -573,6 +649,42 @@ claude
 3. 让这 4 层一起工作
 
 少了其中一层，都不是完整链路。
+
+### 双轨兼容后的真实结构
+
+现在仓库里多了一层运行时事实源：
+
+- `claude-runtime/`
+
+维护逻辑变成：
+
+- 开发时优先修改 `claude-runtime/`
+- 然后同步生成项目兼容层 `.claude/`
+- 再同步生成插件目录 `plugins/writing-agent/`
+
+对应命令：
+
+```bash
+npm run sync:claude-runtime
+npm run check:claude-runtime
+```
+
+第一条负责同步，第二条负责检查有没有漂移。
+
+这样可以避免后续出现：
+
+- `git clone` 用户拿到的是新逻辑
+- `plugin` 用户拿到的还是旧逻辑
+
+如果你在改运行时相关内容，例如：
+
+- `skills`
+- `agents`
+- `styles`
+- `workflows`
+- `scripts`
+
+那就不要只改 `.claude/` 或 `plugins/writing-agent/`，而是优先改 `claude-runtime/`。
 
 ---
 

@@ -7,8 +7,11 @@
     "export:html": "tsx scripts/export_markdown_to_html.ts",
     "validate:workflow": "python scripts/validate_workflow.py",
     "check:docs": "python scripts/validate_workflow.py --targets docs",
+    "sync:claude-runtime": "python scripts/sync_claude_runtime.py",
+    "check:claude-runtime": "python scripts/check_claude_runtime_sync.py",
+    "bootstrap:workspace": "python scripts/bootstrap_workspace.py",
     "test:py": "python -m unittest discover -s tests -p \"test_*.py\"",
-    "check:scripts": "python -m py_compile scripts/generate_clean.py scripts/auto_clean_hook.py scripts/split_draft_notes.py scripts/update_run_manifest.py scripts/validate_workflow.py"
+    "check:scripts": "python -m py_compile scripts/generate_clean.py scripts/auto_clean_hook.py scripts/split_draft_notes.py scripts/update_run_manifest.py scripts/validate_workflow.py scripts/claude_runtime_paths.py scripts/sync_claude_runtime.py scripts/check_claude_runtime_sync.py scripts/bootstrap_workspace.py"
   },
   "dependencies": {
     "fflate": "^0.8.2",

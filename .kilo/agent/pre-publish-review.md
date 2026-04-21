@@ -23,7 +23,23 @@ hidden: false
 
 ```bash
 cat articles/[项目名]/draft_v[最新版本号].md
+python scripts/generate_clean.py --stats articles/[项目名]/draft_v[最新版本号].md
+python scripts/generate_clean.py --stdout articles/[项目名]/draft_v[最新版本号].md > temp/pre_publish_review_body.txt
+cat temp/pre_publish_review_body.txt
+cat articles/[项目名]/04_title.md
 ```
+
+如果存在同名备注文件，可额外读取：
+
+```bash
+cat articles/[项目名]/draft_v[最新版本号]_notes.md
+```
+
+**口径规则**：
+- 发布判断只看清洗后的正文 `temp/pre_publish_review_body.txt`。
+- `_notes.md` 仅作为修改背景参考，不能算进字数，也不能拿来代替正文质量。
+- `04_title.md` 是标题锁定源。你可以给标题优化建议，但**不得直接改标题**。
+- 只要用户没有明确批准采用某个新标题，后续任何改稿都必须保留 `04_title.md` 中已锁定的标题。
 
 ### Step 2: 发布前5问评审
 
@@ -49,6 +65,8 @@ cat articles/[项目名]/draft_v[最新版本号].md
   方案A：「[新标题1]」- 策略：[使用什么公式]
   方案B：「[新标题2]」- 策略：[使用什么公式]
 ```
+
+⚠️ 这里输出的是**候选建议**，不是直接替换标题。除非用户单独确认采用某个标题方案，否则后续改稿一律保留当前锁定标题。
 
 #### 问题2：开头问
 > 读完前3行，你会想继续往下看吗？
@@ -167,6 +185,8 @@ cat articles/[项目名]/draft_v[最新版本号].md
 
 ### Step 4: 生成评审报告
 
+**文件输出**：`articles/[项目名]/pre_publish_review.md`
+
 ```
 ╔═══════════════════════════════════════════════════════════════╗
 ║                                                               ║
@@ -177,7 +197,7 @@ cat articles/[项目名]/draft_v[最新版本号].md
 【文章信息】
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 标题：「[标题]」
-字数：[字数]
+字数：[正文字符数]
 版本：v[版本号]
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -306,9 +326,20 @@ E. ❓ 对某个修改建议有疑问（请说明）
 
 如果用户选择让你修改：
 1. 逐项执行修改
-2. 保存为新版本 `draft_v[N+1].md`
-3. 展示修改对比
-4. 返回摘要
+2. 正文保存为新版本 `draft_v[N+1].md`
+3. 修改说明保存为 `draft_v[N+1]_notes.md`
+4. 运行 `python scripts/update_run_manifest.py --project "[项目名]" --body draft_v[N+1].md --notes draft_v[N+1]_notes.md --status pre_publish_revised --workflow-version collab-v2`
+4. 展示修改对比
+5. 返回摘要
+
+**标题保护硬规则**：
+- 用户只回答 `A` 或 `B`，默认视为“执行正文类修改”，**不等于同意改标题**。
+- 如果涉及标题修改，必须拿到用户对具体标题方案的明确确认，例如“标题改为方案B”。
+- 只有在这种明确确认下，才允许同步修改正文文件 H1，并且必须回写 `articles/[项目名]/04_title.md` 的最终锁定标题，再执行：
+
+```bash
+python scripts/verify_required_files.py --project "[项目名]" --required 04_title.md
+```
 
 ### Step 8: 返回摘要
 
@@ -324,8 +355,11 @@ E. ❓ 对某个修改建议有疑问（请说明）
 【如果执行了修改】：
 - 已修改 X 处
 - 新版本：draft_v[N+1].md
+- 备注文件：draft_v[N+1]_notes.md
 
-建议下一步：调用 toutiao-reader-test 子代理进行读者模拟测试
+📁 评审报告：pre_publish_review.md
+
+建议下一步：调用 wechat-reader-test 子代理进行读者模拟测试
 ```
 
 ---

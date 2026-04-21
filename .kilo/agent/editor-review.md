@@ -21,13 +21,36 @@ hidden: false
 
 ```bash
 cat articles/[项目名]/draft_v[版本号].md
+python scripts/generate_clean.py --stats articles/[项目名]/draft_v[版本号].md
+python scripts/generate_clean.py --stdout articles/[项目名]/draft_v[版本号].md > temp/editor_review_body.txt
+cat temp/editor_review_body.txt
 cat articles/[项目名]/01_theme.md  # 获取风格要求
+cat articles/[项目名]/04_title.md  # 获取已锁定标题
 ```
 
 如果指定了风格，读取风格文件：
 ```bash
 cat .kilo/styles/[风格名].md
 ```
+
+如果存在同名备注文件，可额外读取：
+```bash
+cat articles/[项目名]/draft_v[版本号]_notes.md
+```
+
+如果项目目录存在运行态文件，可额外读取：
+```bash
+cat articles/[项目名]/run_manifest.json
+```
+
+**审稿口径规则**：
+- `draft_v[版本号].md` 只用于读取标题、版本、风格等元信息。
+- `temp/editor_review_body.txt` 才是正文审稿基准。
+- `draft_v[版本号]_notes.md` 仅可作为作者自检和修改背景参考，绝不能当正文内容引用。
+- 所有字数、结构、AI 味、平淡度判断，都必须以清洗后的正文为准。
+- 头部元数据、分割线，以及任何 `_notes.md` 内容，一律不得纳入总字数和正文问题判断。
+- `04_title.md` 是标题的唯一锁定来源。你可以评论标题、提出备选标题，但**不得直接改标题**。
+- 除非用户明确指定“采用某个新标题”，否则任何正文修订都必须原样保留已锁定标题。
 
 ### Step 2: AI味道检测 ⭐⭐⭐⭐⭐
 
@@ -103,7 +126,7 @@ cat .kilo/styles/[风格名].md
 【文章信息】
 - 标题：[标题]
 - 版本：v[版本号]
-- 字数：[字数]
+- 字数：[正文字符数]
 - 风格：[风格名称]
 
 ═══════════════════════════════════════════════════
@@ -190,7 +213,24 @@ AI味道扣分：-X 分
 
 如果用户同意，按优先级修改并保存新版本：
 
-**文件路径**：`articles/[项目名]/draft_v[版本号+1].md`
+**文件路径**：
+- 正文：`articles/[项目名]/draft_v[版本号+1].md`
+- 备注：`articles/[项目名]/draft_v[版本号+1]_notes.md`
+
+保存后，立即更新运行态：
+
+```bash
+python scripts/update_run_manifest.py --project "[项目名]" --body draft_v[版本号+1].md --notes draft_v[版本号+1]_notes.md --status reviewed --workflow-version collab-v2
+```
+
+**标题保护硬规则**：
+- 默认只改正文，不改标题。
+- 如果你提出了新标题方案，用户仍需单独明确确认“采用哪个标题方案”。
+- 只有用户明确批准改标题时，才允许同步修改 `draft_v[版本号+1].md` 的 H1，并且必须同时回写 `articles/[项目名]/04_title.md` 的最终锁定标题，再执行：
+
+```bash
+python scripts/verify_required_files.py --project "[项目名]" --required 04_title.md
+```
 
 ### Step 7: 返回摘要
 
@@ -225,7 +265,9 @@ B. 调用 pre-publish-review 子代理进行发布前评审
 ## 输出规范
 
 - **返回内容**：审稿报告、修改建议
-- **可选输出**：修改后的新版本 `draft_v[版本号+1].md`
+- **可选输出**：
+  - 修改后的新正文 `draft_vN.md`
+  - 对应内部备注 `draft_vN_notes.md`
 
 ## 版本记录
 - v1.1.0 (2026-01-28): 升级AI味道检测系统

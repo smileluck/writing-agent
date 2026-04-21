@@ -1,4 +1,4 @@
-# 写稿Agent v0.7.6
+# 写稿Agent v0.7.7
 
 > 🚀 一个基于 Skills + Subagents 的全栈写作系统。
 > 兼容 **Claude Code** / **Kilo** / **Trae** 三种 CLI/IDE 工具。
@@ -19,10 +19,17 @@
 [![Claude Code](https://img.shields.io/badge/Claude-Code-blue)](https://code.claude.com)
 [![Kilo](https://img.shields.io/badge/Kilo-CLI-green)](https://kilo.ai)
 [![Trae](https://img.shields.io/badge/Trae-IDE-orange)](https://trae.cn)
+[![Desktop App](https://img.shields.io/badge/Desktop%20App-Windows%20Preview-2f6f4f)](https://github.com/dongbeixiaohuo/writing-agent/releases/tag/app-preview-0.1.0)
+[![Writing Workflow](https://img.shields.io/badge/Writing%20Workflow-Stage%20Driven-1f6feb)](https://github.com/dongbeixiaohuo/writing-agent)
 
-## 🎯 项目简介
 
-写稿Agent 是一个**协作式写作工作流系统**，通过强制性的模式选择、需求澄清、风格建模、素材调研和主编审稿，帮助你写出**不像AI生成**的高质量文章。
+你拿到的不只是文章，更是一套能反复复用、能中断继续、能回头复盘的写作生产线。
+
+它适合这几类人：
+- 想写长文、观点文、公众号文章，不想再靠一把梭 prompt 碰运气
+- 想让 AI 写作过程可中断、可修改、可复盘
+- 不只想拿到一篇文，而是想把写作变成稳定、可控、可积累的工作流
+
 
 ### 多工具兼容
 
@@ -42,77 +49,56 @@
 - 💸 **社交印象管理 (`empathy-designer`)**：升维共情点为“社交转发动机”（印象管理假说），构建带有强社交货币属性的 `04_share_map.md`。
 - 🏁 **极道开头赛马场 (`opening-tournament`)**：新增 Stage 5.8 环节，强制并行生成 3 款差异化前缀（暴击/撕裂/冷眼），由用户选出最优开局。
 
-### v0.7.5 锋利度与互动流强化
-- 🔪 **6刀底层重构**：引入 `position-engine` (Stage 1.5) 强制锁定立场，洗去默认程序员/互联网偏见；摒弃“空洞金句”，定义带有“代价、场景与判断”的真实金句；允许大纲执行时“局部失控”以增强真人口吻。
-- 🛑 **强制互动中断机制**：在工作流导演中注入 `Yield/Stop` 强拦截器，彻底解决大模型 auto-pilot 的过度自治越权问题。强行限制大纲、标题、一稿审改和社交测试 4 个核心节点，必须经用户真实确认后才允许向下推演。
-- 📱 **微信社交传播测试**：将头条系算法推荐测评全面升级为 `wechat-reader-test`，专注检验防杠精表现、亲友圈人设匹配和社交点赞动机。
+当前实测可用模型：
 
-### v0.7.0 系统自进化双轴架构
-- 🔄 **自动复盘与经验装载**：引入 `edit-diff-learner` 和 `memory-loader`。系统会自动对撞定稿与初稿提炼写作经验（15维风格DSL），并在下次写作前编译记忆包 (`00_memory_packet.md`)，注入到大纲、标题、执行和去AI味 Agent 中，实现"长记性"。
-- ⚙️ **自动化物理排版 Hook**：利用 Claude Code Hooks 机制跳出大模型约束，在工作流大结局通过 `auto_clean_hook.py` 静默生成排版纯净版 `_clean.txt`。
-
-### v0.6.4 技能结构优化
-- 🔧 **Progressive Disclosure 架构升级**：应用 Skill Creator 最佳实践，大幅提升技能加载效率。
-- 📉 **Token 使用优化**：公众号文章获取技能从 1238 行精简至 ~200 行，Token 消耗减少 85%。
-- 📚 **文档结构化**：核心流程保留在 SKILL.md，详细说明拆分到 references 目录，按需加载。
-- 📖 **调用示例增强**：工作流导演新增完整的 Agent 工具调用示例，提升可执行性。
-
-### v0.6.3 去AI味专家进阶升级
-- ⚖️ **50分制质量自评**：加入严苛输出把控，强迫 AI 根据五大维度自评，低于 40 分内部打回重写。
-- 🚫 **致命黑名单词库**：精准打击“此外”、“至关重要”、“织锦”、“格局”等典型机器生成的“塑料词汇”。
-- ⚡ **快速排雷自检 (Quick Check)**：强制打断 AI 常见的“三段式强迫症”、“等长句式”和“无聊排比”。
-- ❤️ **全新注入灵魂指令**：通过引入具体生活细节、强加第一人称时局感、甚至刻意的逻辑混乱，赋予文本真正的强人设观感。
-
-### v0.6.0 去AI味与真实模拟
-- 🤖 **Humanizer 去AI味专家**：基于 Wikipedia AI Cleanup 项目，识别并修复24种AI痕迹（内容/语言/风格），注入人类"灵魂"。
-- 🎨 **Article Illustrator 文章配图师**：为文章自动设计视觉风格并生成高质量配图（封面/插图/概念图）。
-- 📺 **读者模拟器 v3.0 直播版**：模拟真实读者的"直播现场"——心理弹幕、朋友圈截图预览。
-
-### v0.5.1 审稿质量增强
-**解决"打分就过"的问题**，所有评审环节必须给出可执行的修改方案并等待用户确认：
-- 🎯 **标题设计师 v2.0**：15种爆款公式（分6大类）+ 5个候选 + 钩子说明
-- ✅ **发布前评审 v2.0**：每个问题都有「原文→改为」的修改方案 + 用户确认
-- ✅ **读者模拟 v2.1**：具体修改建议 + 可自动执行修改 + 修改后重新测试
-- 🔒 **强制用户确认**：不会再出现"打分就直接过去"的情况
-
-### v0.5.0 重大架构升级
-
-**引入 Subagent 模式**，实现上下文隔离：
-- 🔄 **12 个执行步骤改为独立 Subagent**，每个任务独立上下文
-- 📁 **信息通过文件传递**，不依赖对话上下文，避免 Token 累积
-- 🎯 **工作流导演 Skill 显式调用 Subagent**，保持用户交互能力
-- 💾 **每阶段产物自动落盘**，支持断点续写
-
-### 核心特点
-
-- ✅ **自进化归因引擎**：系统自动追溯初稿与定稿差异，抽取经验打包成 `99_episode.md` 实现跨次记忆 ✨ v0.7.0 New
-- ✅ **无痕排版 Hook**：自动拦截大模型生成结果，利用纯 Python 正则脚本清除底噪，实现公众号直接粘贴 ✨ v0.7.0 New
-- ✅ **超大编制 Subagent 架构**：18 个独立 Subagent 实现上下文完美隔离，将漫长的写作长链路切碎，节省海量 Token
-- ✅ **深度协作工作流**：全 14 阶段创作者模式，囊括盘前准备、记忆装载、素材分析到模拟直播的全链条闭环
-- ✅ **强制去 AI 味道**：Humanizer与24条红线规则，自动去除小标题病、排比上瘾、过度升华等AI特有文风
-- ✅ **风格建模 v3.1**：支持公众号 URL 自动抓取分析、批量多篇拆解、增量汇入语料库
-- ✅ **共情点与标题设计**：提供15类标题公式套件和5个候选方案，强制规划读者情绪跳动周期
-- ✅ **全景素材调研**：不仅梳理网络数据，还进行结构论证、爆款拆解与痛点验伪
-- ✅ **读者实况沙盘**：上线前模拟发出后的心理弹幕、真话吐槽以及朋友圈转发文案 ✨ v0.6.0
-- ✅ **Article Illustrator**：跨端联动生图大模型，为文章生成带情绪的视觉风格匹配插图 ✨ v0.6.0
-- ✅ **严苛自裁机制**：评分系统与强制追问交叉质检，发现敷衍输出直接发回给重构引擎，杜绝烂尾
+- `DeepSeek-V3.2`：默认推荐，最适合低成本先把完整流程跑明白
+- `智谱 GLM`：已实测，不分伯仲
+- `MiniMax`：已实测，不分伯仲
 
 ---
 
-## 📚 什么是 Claude Code Skills 和 Subagents？
+## 桌面预览版
 
-### Skills 与 Subagents 的区别
+现在可以直接下载 `Writing Agent App` 的 Windows 预览版：
 
-| 特性 | Skills | Subagents |
-|------|--------|-----------|
-| **触发方式** | 语义匹配（自动） | 显式调用（手动） |
-| **上下文** | 共享主对话 | 独立隔离 |
-| **适用场景** | 需要自动识别意图 | 需要隔离执行的任务 |
-| **Token 消耗** | 会累积 | 每个任务独立 |
+- [下载 Writing Agent App 预览版 0.1.0](https://github.com/dongbeixiaohuo/writing-agent/releases/download/app-preview-0.1.0/Writing.Agent.App_0.1.0_x64-setup.exe)
 
-### 本项目的架构（v0.7.5）
+桌面应用源码位于：
 
-本项目采用 **Skills + Subagents 混合架构**：
+- `writing-agent-app/`
+
+如果你只想直接使用桌面应用，优先下载上面的安装包。  
+如果你想查看或参与源码开发，可以直接看仓库里的 `writing-agent-app/` 目录。
+
+---
+
+## 快速入口
+
+- 下载桌面应用：[桌面预览版](#桌面预览版)
+- 先看完整样本：[老板的AI战略骗局 Demo](#完整-demo老板的ai战略骗局)
+- 再看当前版本：[最新更新](#最新更新)
+- 先判断模型成本：[模型与 Coding Plan](#模型与-coding-plan)
+- 想直接部署：[完整版安装](#完整版安装)
+- 想按新手路径一步步装：[给新手的完整安装与使用说明](#给新手的完整安装与使用说明)
+
+---
+
+## 先看一个完整样本
+
+如果你只想先判断这个仓库值不值得收藏，不要先看安装，先看这个真实样本：
+
+[`demo/老板的AI战略骗局/`](demo/老板的AI战略骗局/)
+
+这不是只放一篇成品，而是把整条写作链路都放出来了，包括：
+
+- 选题和约束：[01_theme.md](demo/老板的AI战略骗局/01_theme.md)
+- 观点定牙齿：[01b_position.md](demo/老板的AI战略骗局/01b_position.md)
+- 伤疤和代价：[02_scar_tissue.md](demo/老板的AI战略骗局/02_scar_tissue.md)
+- 结构和开头：[03_outline.md](demo/老板的AI战略骗局/03_outline.md)、[05c_opening_hook.md](demo/老板的AI战略骗局/05c_opening_hook.md)
+- 草稿迭代：[draft_v1.md](demo/老板的AI战略骗局/draft_v1.md)、[draft_v2.md](demo/老板的AI战略骗局/draft_v2.md)
+- 审稿和传播测试：[pre_publish_review.md](demo/老板的AI战略骗局/pre_publish_review.md)、[wechat_reader_test.md](demo/老板的AI战略骗局/wechat_reader_test.md)
+- 最终发布稿：[humanized_final_clean.txt](demo/老板的AI战略骗局/humanized_final_clean.txt)
+- 运行态记录：[run_manifest.json](demo/老板的AI战略骗局/run_manifest.json)
 
 ```
 .kilo/                          ← 唯一数据源（同步到 .claude/ 和 .trae/）
@@ -156,31 +142,20 @@
     └── ...
 ```
 
-### 工作流程示意
-
-```
-用户请求 → [工作流导演 Skill] 介入指挥调度
-    │
-    ├──→ "使用 memory-loader ... " → 将前世经验带入本期 00_memory_packet.md ✨ New
-    │
-    ├──→ "使用 outline-architect ... " → 输出带目标的 03_outline.md
-    │
-    ├──→ "使用 writing-executor ... " → 注入规则与大纲产出 draft_v1.md
-    │
-    ├──→ "使用 humanizer ...." → 高压驱魔产出 _humanized.md
-    │
-    ├──→ 自动触发 [Hook: auto_clean_hook.py] 暴力排版净化 ✨ New
-    │
-    └──→ "使用 edit-diff-learner ... " → 碰撞首尾得出下一期的 99_episode.md 宝贵财富 ✨ New
+```text
+01_theme.md
+-> 01b_position.md
+-> 02_scar_tissue.md
+-> 03_outline.md
+-> 05c_opening_hook.md
+-> draft_v2.md
+-> humanized_final.md
+-> humanized_final_clean.txt
 ```
 
-**每个 Subagent：**
-- ✅ 干净的上下文，从 0 开始
-- ✅ 必须从文件读取前序信息
-- ✅ 只返回摘要给主导演，不传递完整文本
-- ✅ 独立隔离，避免 Token 累积
+如果你看完这套 Demo 觉得“这不是一次性吐全文，而是一条可复盘的生产线”，那这个仓库的核心价值你已经看到了。
 
-### Skills 自动加载机制
+---
 
 **三种工具均可使用：**
 
@@ -212,699 +187,622 @@
    - ✅ 正确：在 `writing-agent/` 目录中启动 → Skills 自动加载
    - ❌ 错误：在其他目录启动 → Skills 不会被加载
 
-**Claude Code 的 Skills 加载规则：**
+这套 Demo 需要传达三件事：
 
-1. **全局 Skills 目录**：`~/.claude/skills/`（所有项目都能用）
-2. **项目 Skills 目录**：`项目根目录/.claude/skills/`（仅当前项目可用）
+- 这是一条完整生产线，不是只放终稿
+- 默认发布出口仍然是 `_clean.txt`，也可以在最后一步额外导出公众号排版 `.html`
+- 中间产物本身就能证明“可调度、可中断、可复盘”
 
-**本项目采用"项目级 Skills"**，这意味着：
-- ✅ 克隆项目后，Skills 已经在项目目录中（无需手动复制）
-- ✅ 在项目目录中启动 Claude Code，Skills 自动可用
-- ✅ 不会污染你的全局 Skills 目录
-- ✅ 多个项目的 Skills 互不干扰
+最关键的几个文件：
 
-**如果你想让这些 Skills 在所有项目中都能用：**
+- [01b_position.md](demo/老板的AI战略骗局/01b_position.md)：先把文章的“牙齿”定下来，避免后面越写越软
+- [02_scar_tissue.md](demo/老板的AI战略骗局/02_scar_tissue.md)：不是堆资料，而是打捞致命场景、隐秘代价、荒诞细节
+- [04_share_map.md](demo/老板的AI战略骗局/04_share_map.md)：不是只做共情，而是设计读者为什么愿意转发
+- [05c_opening_hook.md](demo/老板的AI战略骗局/05c_opening_hook.md)：先赛马开头，再锁定起手式
+- [pre_publish_review.md](demo/老板的AI战略骗局/pre_publish_review.md)：发布前追问和红队挑刺
+- [wechat_reader_test.md](demo/老板的AI战略骗局/wechat_reader_test.md)：模拟朋友圈、同行群、家族群的真实反应
+- [humanized_final_clean.txt](demo/老板的AI战略骗局/humanized_final_clean.txt)：最后给你一个可直接复制粘贴发布的纯文本终稿
 
-<details>
-<summary>点击查看如何复制到全局目录</summary>
+如果你只看最终效果，这篇 Demo 的发布出口就是：
 
-**Windows (PowerShell):**
-```powershell
-xcopy /E /I ".claude\skills" "$env:USERPROFILE\.claude\skills"
+```text
+demo/老板的AI战略骗局/humanized_final_clean.txt
 ```
-
-**Linux/macOS:**
-```bash
-cp -r .claude/skills/* ~/.claude/skills/
-```
-
-</details>
 
 ---
 
-## 📦 快速开始
+## 最新更新
 
-### 前置要求
+首页只保留当前主线版本，历史版本不再堆在前面。
 
-**方式一：使用 Claude 官方模型**
-- [Claude Code](https://code.claude.com) 账号
-- 基本的命令行操作能力
+### v0.7.7 新增公众号排版 HTML 导出
 
-**方式二：使用国产大模型（推荐，更经济）**
+- 新增 `html-exporter` 末端导出器：最终 Markdown 定稿后，可以额外导出一份适合公众号排版和复制的 `.html`
+- 内置 4 种默认版式可选：`经典正文（default）`、`精致长文（grace）`、`极简评论（simple）`、`现代杂志（modern）`
+- 保留 `_clean.txt` 作为默认纯文本出口：你可以只拿纯文本，也可以同时拿纯文本和排版 HTML
+- 收紧 Stage 12.5 契约、运行态记录和回归测试，让“是否导出 HTML、选择哪种版式”变成真实流程，而不是 prompt 口头约束
 
-本项目支持通过 Anthropic API 兼容接口接入多种国产大模型。根据使用频率，可选择按量付费或包月套餐：
+如果你关心的是“最后到底能交付什么”，这一版的答案很直接：**正文、可直接复制的 `_clean.txt`、可选的公众号排版 `.html`，都能稳定落地。**
 
-#### 按量付费模型（适合偶尔使用）
+### v0.7.6 深化生产骨架
 
-| 模型 | 推荐指数 | 成本 | 获取 API Key | 官方文档 |
-|------|---------|------|-------------|---------|
-| **DeepSeek-V3** | ⭐⭐⭐⭐⭐ | 极低 | [DeepSeek 平台](https://platform.deepseek.com) | [接入文档](https://api-docs.deepseek.com/zh-cn/guides/anthropic_api) |
-| **智谱 GLM** | ⭐⭐⭐⭐ | 中等 | [智谱开放平台](https://open.bigmodel.cn) | [接入文档](https://docs.bigmodel.cn/cn/coding-plan/tool/claude) |
-| **MiniMax** | ⭐⭐⭐⭐ | 中等 | [MiniMax 平台](https://platform.minimaxi.com) | [接入文档](https://platform.minimaxi.com/docs/api-reference/text-anthropic-api) |
+- `research-expert` 从泛泛调研改成“伤疤打捞”，核心产物是 [02_scar_tissue.md](demo/老板的AI战略骗局/02_scar_tissue.md)
+- `empathy-designer` 从共情点设计升级成“社交转发动机”，核心产物是 [04_share_map.md](demo/老板的AI战略骗局/04_share_map.md)
+- 新增 `opening-tournament`，在正式写稿前先赛马开头，核心产物是 [05c_opening_hook.md](demo/老板的AI战略骗局/05c_opening_hook.md)
 
-> **本项目所有测试均基于 DeepSeek-V3 模型完成。** 一篇 2000 字文章成本约 ¥0.03，性价比极高。
-
-#### 💰 Coding Plan 包月套餐（适合频繁使用，强烈推荐）
-
-如果你需要频繁使用本项目，包月套餐成本几乎可以忽略不计。以下是主流平台对比：
-
-| 平台 | 首月特惠 (Lite/Pro) | 续费价格 (Lite/Pro) | 月度额度 (Lite/Pro) | 推荐指数 |
-|------|--------------------|--------------------|--------------------|---------|
-| **[阿里云百炼](https://bailian.console.aliyun.com/cn-beijing/?tab=coding-plan#/efm/index)** | ¥7.9 / ¥39.9 | ~¥40 / ~¥200 | 18k / 90k 次请求 | ⭐⭐⭐⭐⭐ |
-| **[腾讯云](https://cloud.tencent.com/act/pro/codingplan)** | ¥7.9 / ¥39.9 | ~¥40 / ~¥200 | 充足 / 海量 | ⭐⭐⭐⭐⭐ |
-| **[百度千帆](https://cloud.baidu.com/product/codingplan.html)** | ¥7.9 / ¥39.9 | ~¥40 / ~¥200 | 充足 / 海量 | ⭐⭐⭐⭐⭐ |
-| **[火山引擎](https://www.volcengine.com/activity/codingplan)** | ¥9.9 / ¥49.9 | ~¥50 / 未定 | 1200次/5h / 更多 | ⭐⭐⭐⭐⭐ |
-| **[无问芯穹](https://cloud.infini-ai.com/platform/ai)** | ¥19.9 / ¥40.0 | ¥40 / ¥200 | 12k / 60k 次请求 | ⭐⭐⭐⭐ |
-| **[MiniMax](https://platform.minimaxi.com/subscribe/coding-plan)** | ¥29/月 (Starter) | ¥290/年 | 40 prompts/5h | ⭐⭐⭐⭐ |
-| **[智谱 GLM](https://open.bigmodel.cn/glm-coding)** | ~¥30/月 (Lite) | ¥411/年 | 数千次/月 | ⭐⭐⭐ |
-| **[Kimi Code](https://www.kimi.com/code)** | ¥49/月 (基础) | - | ~300 次/月 | ⭐⭐⭐ |
-
-**💡 如何选择：**
-
-- **偶尔使用（每月 < 10 篇文章）**：推荐 **DeepSeek-V3 按量付费**，成本极低
-- **轻度使用（每月 10-50 篇）**：推荐 **阿里云百炼 Lite**（首月 ¥7.9）或 **火山引擎 Lite**（首月 ¥9.9）
-- **中度使用（每月 50-200 篇）**：推荐 **无问苍穹 Lite**（¥19.9 特惠）或 **MiniMax Starter**（¥29/月）
-- **重度使用（每月 > 200 篇）**：推荐 **阿里云百炼 Pro** 或 **无问苍穹 Pro**
-
-**配置方式：** 所有 Coding Plan 套餐订阅后会获得专用 API Key，配置方式与按量付费模型完全相同（参考下方步骤 5）。
-
-### 安装步骤（新手友好版）
-
-本指南以 **Windows 系统**为主，同时提供 Linux/macOS 的对应说明。
+如果你只想知道仓库现在值不值得拉下来试，先看 `v0.7.7` 这 3 条就够了。更老的版本记录去 `CHANGELOG` 或 Releases 看，不应该堵在首页前面。
 
 ---
 
-#### 步骤 1：安装 Node.js 环境
+## 模型与 Coding Plan
 
-Claude Code 需要 Node.js 18 或更高版本才能运行。
+这个项目不一定非要跑 Claude 官方模型。对大多数人来说，更实用的是通过 Anthropic 兼容接口接第三方模型。
 
-<details>
-<summary><b>Windows 安装 Node.js</b></summary>
+当前推荐逻辑很简单：
 
-**方法一：官网下载（推荐）**
+- 想最低成本先把完整流程跑通：`DeepSeek-V3.2`
+- 已经有 `智谱 GLM` 或 `MiniMax` 套餐：直接用，也已经实测过，效果不分伯仲
+- 每个月会高频写作、频繁审稿和反复改稿：直接考虑 `Coding Plan`
+- 需要在多家兼容接口之间反复切换：上 [CC-Switch](https://github.com/farion1231/cc-switch)
 
-1. 打开浏览器访问 [https://nodejs.org/](https://nodejs.org/)
-2. 点击 **"LTS"** 版本进行下载（长期支持版本，版本号需 ≥ 18）
-3. 下载完成后双击 `.msi` 文件
-4. 按照安装向导完成安装，**保持默认设置即可**
-5. 安装完成后，打开 **PowerShell**（推荐）或 CMD，输入以下命令验证：
-   ```powershell
-   node --version
-   npm --version
-   ```
-   如果显示版本号（如 `v20.x.x` 和 `10.x.x`），说明安装成功！
+为什么首页默认先写 `DeepSeek-V3.2`：
 
-**方法二：使用包管理器**
+- 不是因为它明显强于另外两家
+- 而是最早测试路径最便宜，先充 10 块钱就足够把这套流程从头到尾验证一遍
 
-如果你安装了 Chocolatey 或 Scoop，可以使用命令行安装：
-```powershell
-# 使用 Chocolatey
-choco install nodejs
+首页只保留一个简表：
 
-# 或使用 Scoop
-scoop install nodejs
-```
+| 场景 | 推荐 |
+|------|------|
+| 首次验证完整流程 | `DeepSeek-V3.2` 按量付费 |
+| 已有其他平台套餐 | `智谱 GLM` / `MiniMax` 直接接入 |
+| 中高频长期使用 | `Coding Plan` |
+| 多模型来回切换 | `CC-Switch` |
 
-**Windows 注意事项：**
-- ⚠️ 建议使用 **PowerShell** 而不是 CMD（功能更强大）
-- ⚠️ 如果遇到权限问题，尝试**以管理员身份运行** PowerShell
-- ⚠️ 某些杀毒软件可能会误报，需要添加白名单
+完整的模型接入文档、Coding Plan 地址和选型建议，见下方 [模型和成本怎么选](#模型和成本怎么选)。
 
-</details>
+---
 
-<details>
-<summary><b>Linux/macOS 安装 Node.js</b></summary>
+## 它和普通 AI 写作工具有什么不一样
 
-**Ubuntu/Debian:**
+普通 AI 写作：
+
+- 一次性生成全文
+- 改一轮就开始漂
+- 风格、结构、审稿全混在一个大 prompt 里
+- 很难知道文章为什么好，为什么差
+
+写稿Agent：
+
+- 先定主题和立场
+- 再打捞场景、代价和细节
+- 再做大纲、分享触点、具象化和开头赛马
+- 写完后还有主编审稿、发布前评审、微信传播测试、去 AI 味
+- 最后输出 `_clean.txt` 终稿，并可按需额外导出公众号排版 `.html`
+
+一句话说：
+
+**它不是“让 AI 帮你写一篇文章”，而是“把写作拆成可调度、可中断、可复盘的流程”。**
+
+---
+
+## 适合谁，不适合谁
+
+适合：
+
+- 写公众号文章、长文观点文、行业评论的人
+- 对“AI 味”“结构松”“标题软”“开头弱”敏感的人
+- 想把 AI 写作纳入稳定工作流的人
+
+不适合：
+
+- 只想一句话秒出 300 字短文的人
+- 不关心中间产物、只关心快的人
+- 不想做任何确认和审稿的人
+
+---
+
+## 完整版安装
+
+完整版不是只靠一个 Skill 在跑，它依赖整个仓库一起工作：
+
+- `.claude/skills/`
+- `.claude/agents/`
+- `.claude/workflows/`
+- `scripts/`
+
+最短路径：
+
+1. 先准备 `Node.js 18+` 和 `Claude Code`
+2. clone 本仓库
+3. 配好你要用的模型 API 或 Claude 账号
+4. 一定在项目根目录启动 `claude`
+5. 先用 [`demo/老板的AI战略骗局/`](demo/老板的AI战略骗局/) 理解流程，再开始正式写作
+
+如果你已经准备直接跑完整版，继续看：
+
+- [给新手的完整安装与使用说明](#给新手的完整安装与使用说明)
+
+### 现在有两种交付路径
+
+从这一版开始，这个项目同时支持两种使用方式：
+
+| 方式 | 适合谁 | 运行根目录 |
+|------|------|------|
+| `git clone` 仓库 | 想直接拿完整项目、看 demo、参与开发的人 | 仓库根目录 |
+| `plugin` 安装 | 不想先 clone 仓库，只想在任意工作目录里使用工作流的人 | 你的当前工作目录 |
+
+两条路径的底层运行时现在共用一套事实源：
+
+- `claude-runtime/`
+
+然后再分别同步到：
+
+- 项目兼容层：`.claude/`
+- 插件目录：`plugins/writing-agent/`
+
+### 如果你是 `git clone` 用户
+
+用法不变：
+
+1. clone 仓库
+2. 在仓库根目录启动 `claude`
+3. 继续按项目内 `.claude/`、`scripts/`、`demo/` 这套方式使用
+
+### 如果你是 `plugin` 用户
+
+插件模式的目标是：
+
+- 安装插件后，不需要先 clone 这个仓库
+- 在任意正常工作目录启动 `claude`
+- 插件会通过工作区自举脚本补齐最小运行目录
+
+当前仓库里已经包含插件骨架：
+
+- `plugins/writing-agent/`
+- `.claude-plugin/marketplace.json`
+
+安装方式只保留最简单这一条。
+
+假设仓库地址就是：
+
+- `dongbeixiaohuo/writing-agent`
+
+那用户只需要执行：
+
+#### 1. 添加 marketplace
+
 ```bash
-curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-sudo apt-get install -y nodejs
+claude plugin marketplace add dongbeixiaohuo/writing-agent
 ```
 
-**macOS (使用 Homebrew):**
+#### 2. 安装插件
+
+```bash
+claude plugin install writing-agent@writing-agent-marketplace
+```
+
+#### 3. 重新加载插件
+
+```text
+/reload-plugins
+```
+
+装完之后，在你想写文章的目录里启动 `claude` 就可以了。
+
+插件第一次进入一个空工作目录时，会自动补齐最小运行结构：
+
+- `articles/`
+- `.claude/styles/`
+- `.claude/workflows/`
+- `scripts/`
+
+这意味着 plugin 用户不需要 clone 完整仓库，也能让工作流里那些依赖 `.claude/` 和 `scripts/` 的阶段继续正常工作。
+
+---
+
+## 给新手的完整安装与使用说明
+
+如果你对这些东西还不熟：
+
+- GitHub 仓库怎么 clone
+- Claude Code 怎么装
+- Node.js 为什么要装
+- 模型和 API 怎么配
+- 怎么确认项目真的跑起来了
+
+那就直接按这一节来，不需要先去翻别的文档。
+
+---
+
+## 三种安装方式
+
+Claude Code 支持 macOS、Linux、Windows。你该选哪条路，取决于你的系统和习惯。
+
+| 安装方式 | 命令 | 适用平台 | 推荐度 |
+|------|------|------|------|
+| Native Install | `curl -fsSL https://claude.ai/install.sh \| bash` | macOS / Linux / WSL | ⭐ 推荐 |
+| Homebrew | `brew install --cask claude-code` | macOS | 适合已经在用 brew 的人 |
+| WinGet | `winget install --id Anthropic.ClaudeCode -e` | Windows | Windows 首选 |
+
+核心建议：
+
+- 不确定选哪个：macOS / Linux 直接用 Native Install
+- 已经是 Homebrew 用户：用 `brew` 更顺手
+- Windows：先装 Git for Windows，再走 WinGet
+
+---
+
+## 为什么 Node.js 还要讲
+
+这点必须说清楚。
+
+Anthropic 当前文档仍把 `Node.js 18+` 作为 Claude Code 的系统要求。对这个仓库来说，提前准备好 Node.js 也仍然是最稳的做法，原因有两个：
+
+- 如果你后面想走 `npm` 路线安装、升级或调试 Claude Code，Node.js 是硬前置
+- 这个仓库本身带了 `package.json` 和一些基于 Node 的脚本、工具链，后面你大概率还是会用到 `node` / `npm`
+
+所以最稳的建议是：
+
+- 先装好 `Node.js 18+`
+- 再装 Claude Code
+- 最后 clone 仓库并启动项目
+
+### Node.js 怎么装
+
+**Windows：**
+
+- 官网下载安装：[nodejs.org](https://nodejs.org/)
+- 或者直接用 WinGet：
+
+```powershell
+winget install OpenJS.NodeJS.LTS
+```
+
+**macOS：**
+
+- 官网安装包
+- 或者：
+
 ```bash
 brew install node
 ```
 
-**验证安装：**
-```bash
+**Linux：**
+
+- 推荐用 `nvm`
+- 或者用你发行版自己的包管理器
+
+装完先验证：
+
+```powershell
 node --version
 npm --version
 ```
 
-</details>
+能看到版本号，再继续下一步。
 
 ---
 
-#### 步骤 2：克隆项目到本地
+## Claude Code 怎么装
 
-<details>
-<summary><b>Windows 操作</b></summary>
+### macOS / Linux
 
-1. 打开 **PowerShell**
-2. 进入你想存放项目的目录，例如：
-   ```powershell
-   cd D:\Projects
-   ```
-3. 克隆项目：
-   ```powershell
-   git clone https://github.com/dongbeixiaohuo/writing-agent.git
-   cd writing-agent
-   ```
-
-**如果没有安装 Git：**
-- 下载安装：[https://git-scm.com/download/win](https://git-scm.com/download/win)
-- 或者直接从 GitHub 下载 ZIP 文件并解压
-
-</details>
-
-<details>
-<summary><b>Linux/macOS 操作</b></summary>
+打开终端，运行：
 
 ```bash
-cd ~/Projects  # 或你想存放的目录
+curl -fsSL https://claude.ai/install.sh | bash
+```
+
+这个脚本会自动下载 Claude Code，并把 `claude` 命令放到你的 PATH 里。
+
+如果你是 Homebrew 用户，也可以直接：
+
+```bash
+brew install --cask claude-code
+```
+
+装完验证：
+
+```bash
+claude --version
+```
+
+### Windows
+
+Windows 这里建议按“Git for Windows + WinGet”这条路走。
+
+#### 1. 先装 Git for Windows
+
+从 [git-scm.com](https://git-scm.com/) 下载也可以，直接 WinGet 更省事：
+
+```powershell
+winget install --id Git.Git -e
+```
+
+它会顺带给你 Git Bash。Claude Code 在 Windows 上需要这类 Unix 工具链支持，所以这一步不要跳。
+
+#### 2. 安装 Claude Code
+
+```powershell
+winget install --id Anthropic.ClaudeCode -e
+```
+
+如果你不用 WinGet，也可以改走官方 PowerShell 安装脚本：
+
+```powershell
+irm https://claude.ai/install.ps1 | iex
+```
+
+#### 3. 验证安装
+
+重新打开 PowerShell 或 Git Bash，运行：
+
+```powershell
+claude --version
+```
+
+看到版本号就说明装好了。
+
+#### 4. Windows 使用建议
+
+- 推荐用 PowerShell 或 Git Bash
+- 不推荐直接在 CMD 里折腾
+- 如果你装了便携版 Git，Claude Code 找不到 Git Bash，再单独配置 `CLAUDE_CODE_GIT_BASH_PATH`
+
+---
+
+## 五种用法，选哪个
+
+Claude Code 装好之后，常见有五种用法：
+
+| 环境 | 特点 | 适合谁 |
+|------|------|------|
+| 终端 CLI | 最原生、能力最完整 | 日常开发主力方式 |
+| VS Code 扩展 | 在 VS Code 侧边栏里用 | 已经重度依赖 VS Code 的人 |
+| Desktop App | 图形界面更直接 | 不熟终端、但想先上手的人 |
+| Web | 浏览器直接使用 | 临时体验 |
+| JetBrains 插件 | IntelliJ / WebStorm 等集成 | JetBrains 用户 |
+
+这份 README 和本仓库的所有说明，默认都以 **终端 CLI** 为基准。
+
+原因很简单：
+
+- 这个仓库强依赖“当前项目目录”这个上下文
+- `.claude/skills/`、`.claude/agents/`、`.claude/workflows/` 都更适合按 CLI 路径理解
+- 就算你后面要用 VS Code 或 JetBrains，也建议先把 CLI 这条路摸熟
+
+---
+
+## 账号和钱的事
+
+你有两条常见路径：
+
+- 直接用 Claude 官方订阅登录 Claude Code
+- 不走 Claude 订阅，改用 Anthropic 兼容接口接第三方模型
+
+这两条路不是互斥的，只是适用场景不同。
+
+### Claude 官方订阅
+
+如果你打算直接用 Claude 官方账号，常见档位是：
+
+| 方案 | 当前常见价格 | 适合谁 |
+|------|------|------|
+| Pro | `$20/月` | 轻量使用、学习、个人开发 |
+| Max 5x | `$100/月` | 高频使用、每天长时间对话 |
+| Max 20x | `$200/月` | 重度使用、多人或商业项目 |
+
+这组价格和额度变动比较快，最终以 Anthropic 官方页面为准。
+
+简单选法：
+
+- 你只是想先体验 Claude 官方服务：先从 `Pro` 开始
+- 你每天都在用，或者很容易撞额度：再升 `Max 5x`
+- 你是团队或商业重度使用：再看 `Max 20x`
+
+### 这个仓库更常见的实际路径
+
+对这个项目来说，更常见的用法其实是：
+
+- 用 Anthropic 兼容接口
+- 接 `DeepSeek-V3.2`、`智谱 GLM`、`MiniMax` 这类第三方模型
+- 用更低成本把长链路写作流程跑通
+
+所以你不用把“Claude 官方订阅”和“第三方模型 API”理解成二选一。
+
+---
+
+## 模型和成本怎么选
+
+这个项目的模型选择逻辑，不是“谁绝对最强”，而是“谁更适合你的使用方式”。
+
+### 按量付费模型
+
+| 模型 | 当前定位 | 什么时候用 | 获取 API Key | 官方文档 |
+|------|------|------|------|------|
+| **DeepSeek-V3.2** | 默认推荐 | 第一次完整验证流程、预算敏感、想先充少量金额试跑 | [DeepSeek 平台](https://platform.deepseek.com) | [接入文档](https://api-docs.deepseek.com/zh-cn/guides/anthropic_api) |
+| **智谱 GLM** | 已实测同级 | 已有 GLM 套餐或更习惯智谱生态 | [智谱开放平台](https://open.bigmodel.cn) | [接入文档](https://docs.bigmodel.cn/cn/coding-plan/tool/claude) |
+| **MiniMax** | 已实测同级 | 已有 MiniMax 套餐或更习惯 MiniMax 平台 | [MiniMax 平台](https://platform.minimaxi.com) | [接入文档](https://platform.minimaxi.com/docs/api-reference/text-anthropic-api) |
+
+这里要说清楚：
+
+- `智谱 GLM` 和 `MiniMax` 都已经实测过，和 `DeepSeek-V3.2` 不分伯仲
+- README 里先强调 `DeepSeek-V3.2`，不是因为它明显更强
+- 只是因为最开始测试时它的按量成本最低，先充 10 块钱就足够把一整条链路从头到尾跑明白
+
+### Coding Plan 包月套餐
+
+如果你会频繁使用本项目，按量付费不一定最省心。下面这些地址本身就值得收藏：
+
+| 平台 | 首月特惠 / 入门档 | 常见续费 | 适合谁 | 链接 |
+|------|------|------|------|------|
+| 阿里云百炼 | `¥7.9 / ¥39.9` | 约 `¥40 / ¥200` | 量大、价格低、入口稳定 | [阿里云百炼](https://bailian.console.aliyun.com/cn-beijing/?tab=coding-plan#/efm/index) |
+| 腾讯云 | `¥7.9 / ¥39.9` | 约 `¥40 / ¥200` | 腾讯云用户 | [腾讯云](https://cloud.tencent.com/act/pro/codingplan) |
+| 百度千帆 | `¥7.9 / ¥39.9` | 约 `¥40 / ¥200` | 千帆用户 | [百度千帆](https://cloud.baidu.com/product/codingplan.html) |
+| 火山引擎 | `¥9.9 / ¥49.9` | 约 `¥50+` | 字节生态用户 | [火山引擎](https://www.volcengine.com/activity/codingplan) |
+| 无问芯穹 | `¥19.9 / ¥40` | `¥40 / ¥200` | 追求更高配额的人 | [无问芯穹](https://cloud.infini-ai.com/platform/ai) |
+| MiniMax | `¥29/月` 起 | `¥290/年` 起 | 已在 MiniMax 生态内 | [MiniMax Coding Plan](https://platform.minimaxi.com/subscribe/coding-plan) |
+| 智谱 GLM | `¥30/月` 左右 | `¥411/年` 左右 | GLM 用户 | [智谱 GLM Coding](https://open.bigmodel.cn/glm-coding) |
+| Kimi Code | `¥49/月` 起 | 以官方页为准 | 想看 Kimi 方案的人 | [Kimi Code](https://www.kimi.com/code) |
+
+这些套餐的价格、额度和活动会变化，最终以各平台页面为准。这里保留完整地址，是为了方便收藏和后续比较。
+
+### 怎么选最省事
+
+- 每月少量使用：`DeepSeek-V3.2` 按量付费
+- 每月持续写、持续改：优先看 `Coding Plan`
+- 手上已经有 `智谱 GLM` 或 `MiniMax` 套餐：直接接，不需要为了 README 刻意换
+
+### 模型切换怎么搞
+
+如果你不想手改环境变量，推荐直接用：
+
+- [CC-Switch](https://github.com/farion1231/cc-switch)
+
+它适合这类场景：
+
+- 你在 `DeepSeek-V3.2`、`智谱 GLM`、`MiniMax` 之间切换
+- 你不想反复改 `ANTHROPIC_BASE_URL`
+- 你不想每次都重新整理 API Key
+
+---
+
+## 说第一句话
+
+装好了，模型也有了，先不要急着正式写文章。先让 Claude Code 证明它真的能理解这个仓库。
+
+### 1. 进入项目目录
+
+```powershell
 git clone https://github.com/dongbeixiaohuo/writing-agent.git
 cd writing-agent
 ```
 
-</details>
-
----
-
-#### 步骤 3：安装 Claude Code
-
-<details>
-<summary><b>Windows 安装</b></summary>
-
-1. 打开 **PowerShell**（建议以管理员身份运行）
-2. 运行以下命令全局安装 Claude Code：
-   ```powershell
-   npm install -g @anthropic-ai/claude-code
-   ```
-   
-   **如果下载速度慢，可以使用国内镜像：**
-   ```powershell
-   npm install -g @anthropic-ai/claude-code --registry=https://registry.npmmirror.com
-   ```
-
-3. 验证安装：
-   ```powershell
-   claude --version
-   ```
-   如果显示版本号，说明安装成功！
-
-**更新 Claude Code：**
-```powershell
-claude update
-```
-
-</details>
-
-<details>
-<summary><b>Linux/macOS 安装</b></summary>
-
-```bash
-npm install -g @anthropic-ai/claude-code
-
-# 验证安装
-claude --version
-```
-
-</details>
-
----
-
-#### 步骤 4：验证 Skills 是否正确加载
-
-在配置 API 之前，先验证项目的 Skills 是否在正确的位置。
-
-<details>
-<summary><b>Windows 验证</b></summary>
-
-1. 打开 **PowerShell**
-2. 进入项目目录：
-   ```powershell
-   cd D:\Projects\writing-agent  # 替换为你的实际路径
-   ```
-3. 检查 Skills 目录：
-   ```powershell
-   Get-ChildItem -Path ".claude\skills" -Directory
-   ```
-4. **预期输出**：应该看到 3 个 Skills 目录
-   ```
-   工作流导演
-   公众号文章获取
-   风格建模
-   ```
-
-**如果没有看到这些目录：**
-- 检查是否正确克隆了项目（确认使用了 `git clone` 而不是只下载了部分文件）
-- 确认 `.claude` 目录没有被意外删除
-
-</details>
-
-<details>
-<summary><b>Linux/macOS 验证</b></summary>
-
-```bash
-cd ~/Projects/writing-agent  # 替换为你的实际路径
-ls -la .claude/skills/
-```
-
-应该看到 3 个 Skills 目录。
-
-</details>
-
-**✅ 验证通过后，继续下一步配置 API。**
-
----
-
-#### 步骤 5：配置第三方 API（推荐 CC-Switch 可视化工具）
-
-本项目支持通过 Anthropic API 兼容接口接入多种第三方模型。
-
-🔥 **首选推荐：使用跨平台可视化管理工具 CC-Switch**（完全免费）
-
-如果你不想折腾命令行和环境变量，或者需要频繁在 DeepSeek、智谱、Minimax 等多个 API 之间切换，强烈推荐 **[CC-Switch](https://github.com/farion1231/cc-switch)**。
-这是一款专为 Claude Code 以及同类 CLI 工具设计的桌面全能网关，支持 Windows/macOS/Linux。
-
-**核心优势：**
-- 🔄 **一键切换**：图形化界面配置 API Key，点一下鼠标即可无缝切换不同的大模型，免去所有修改环境变量的烦恼。
-- 📦 **自动拉取**：可视化安装与管理各种 MCP 服务器、Prompt 和 Skills。
-- 📊 **多语言与统计**：自带用量追踪，API 成本一目了然；支持完整的本地多流管理。
-
-**获取方式：** 前往 [CC-Switch Releases](https://github.com/farion1231/cc-switch/releases) 下载对应系统的安装包即可。
-
----
-
-如果由于某些原因你无法使用 UI 工具，可以通过以下传统的**纯代码/命令行方法**进行手动配置：
-
-**你需要手动准备的信息：**
-- `API_BASE_URL`：第三方 API 的基础地址（如 `https://api.example.com/v1`）
-- `API_KEY`：你的 API 密钥（从第三方平台获取）
-
----
-
-<details>
-<summary><b>方法一：配置文件方式（强烈推荐✨）</b></summary>
-
-这是最稳定的配置方式，配置一次永久生效。
-
-**Windows 操作：**
-
-1. 打开文件资源管理器，在地址栏输入：
-   ```
-   %USERPROFILE%\.claude
-   ```
-   如果文件夹不存在，手动创建它。
-
-2. 在该文件夹下创建文件 `settings.json`（如果已存在则直接编辑）
-
-3. 用记事本或 VS Code 打开 `settings.json`，填入以下内容：
-   ```json
-   {
-     "env": {
-       "ANTHROPIC_AUTH_TOKEN": "你的API密钥",
-       "ANTHROPIC_BASE_URL": "https://api.example.com/v1",
-       "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1"
-     }
-   }
-   ```
-
-4. **替换示例值：**
-   - 将 `"你的API密钥"` 替换为你从第三方平台获取的实际 API Key
-   - 将 `"https://api.example.com/v1"` 替换为第三方 API 的实际地址
-
-5. 保存文件
-
-**Linux/macOS 操作：**
-
-```bash
-# 创建配置目录（如果不存在）
-mkdir -p ~/.claude
-
-# 编辑配置文件
-nano ~/.claude/settings.json
-```
-
-填入相同的 JSON 内容，保存后退出（Ctrl+X → Y → Enter）。
-
-**配置文件路径说明：**
-- Windows: `C:\Users\你的用户名\.claude\settings.json`
-- Linux/macOS: `~/.claude/settings.json`
-
-</details>
-
----
-
-<details>
-<summary><b>方法二：PowerShell 永久环境变量（Windows）</b></summary>
-
-这种方法会将配置写入系统环境变量，重启后仍然有效。
-
-**在 PowerShell 中运行：**
+### 2. 启动 Claude Code
 
 ```powershell
-# 设置用户级环境变量（永久生效）
-[System.Environment]::SetEnvironmentVariable("ANTHROPIC_BASE_URL", "https://api.example.com/v1", [System.EnvironmentVariableTarget]::User)
-[System.Environment]::SetEnvironmentVariable("ANTHROPIC_AUTH_TOKEN", "你的API密钥", [System.EnvironmentVariableTarget]::User)
-```
-
-**验证设置：**
-```powershell
-# 查看环境变量
-[System.Environment]::GetEnvironmentVariable("ANTHROPIC_BASE_URL", [System.EnvironmentVariableTarget]::User)
-[System.Environment]::GetEnvironmentVariable("ANTHROPIC_AUTH_TOKEN", [System.EnvironmentVariableTarget]::User)
-```
-
-**⚠️ 注意：** 设置后需要**重新打开 PowerShell 窗口**才能生效。
-
-</details>
-
----
-
-<details>
-<summary><b>方法三：临时环境变量（当前会话）</b></summary>
-
-这种方法只在当前 PowerShell/终端会话中有效，关闭窗口后失效。
-
-**Windows (PowerShell):**
-```powershell
-$env:ANTHROPIC_BASE_URL = "https://api.example.com/v1"
-$env:ANTHROPIC_AUTH_TOKEN = "你的API密钥"
-```
-
-**Linux/macOS (Bash/Zsh):**
-```bash
-export ANTHROPIC_BASE_URL="https://api.example.com/v1"
-export ANTHROPIC_AUTH_TOKEN="你的API密钥"
-```
-
-**验证设置：**
-```powershell
-# Windows PowerShell
-echo $env:ANTHROPIC_BASE_URL
-echo $env:ANTHROPIC_AUTH_TOKEN
-
-# Linux/macOS
-echo $ANTHROPIC_BASE_URL
-echo $ANTHROPIC_AUTH_TOKEN
-```
-
-</details>
-
----
-
-**具体模型配置示例：**
-
-如果你使用的是本项目推荐的模型，可以参考以下配置：
-
-- **DeepSeek-V3**: 参考 [接入文档](https://api-docs.deepseek.com/zh-cn/guides/anthropic_api)
-- **智谱 GLM**: 参考 [接入文档](https://docs.bigmodel.cn/cn/coding-plan/tool/claude)
-- **MiniMax**: 参考 [接入文档](https://platform.minimaxi.com/docs/api-reference/text-anthropic-api)
-
----
-
-#### 步骤 6：启动 Claude Code
-
-<details>
-<summary><b>Windows 操作</b></summary>
-
-1. 打开 **PowerShell**
-2. 进入项目目录：
-   ```powershell
-   cd D:\Projects\writing-agent  # 替换为你的实际路径
-   ```
-3. 启动 Claude Code：
-   ```powershell
-   claude
-   ```
-4. 首次启动会进行初始化，按照提示完成设置
-
-</details>
-
-<details>
-<summary><b>Linux/macOS 操作</b></summary>
-
-```bash
-cd ~/Projects/writing-agent  # 替换为你的实际路径
 claude
 ```
 
-</details>
+如果你走 Claude 官方账号，第一次启动会引导你登录。
+
+如果你走第三方兼容接口，先把 `settings.json` 配好再启动。
+
+### 3. 先说这句话
+
+进入对话后，直接试一句：
+
+```text
+先别写新文章，先解释 demo/老板的AI战略骗局 里每个阶段文件各自起什么作用。
+```
+
+这句话的好处是：
+
+- 它能验证 Claude Code 读没读到当前项目目录
+- 它能验证 `.claude/skills/` 是否被正确加载
+- 它能让你立刻理解这套流程到底怎么工作
 
 ---
 
-#### 步骤 7：开始使用并验证 Skills
+## 确认一切正常
 
-启动成功后，先验证 Claude Code 是否识别了项目的 Skills。
+按这个清单过一遍：
 
-**验证 Skills 加载：**
+| 检查项 | 命令 / 操作 | 预期结果 |
+|------|------|------|
+| Node.js 可用 | `node --version` / `npm --version` | 能看到版本号 |
+| Claude CLI 可用 | `claude --version` | 能看到版本号 |
+| Claude 环境自检 | `claude doctor` | 没有关键错误 |
+| 项目目录正确 | 在仓库根目录执行 `dir` / `ls` | 能看到 `.claude/`、`demo/`、`scripts/` |
+| Skills 可见 | 启动 `claude` 后询问有哪些 skills | 至少能识别项目级 skills |
+| Demo 可读 | 让它解释 `demo/老板的AI战略骗局/` | 能说明各阶段文件的作用 |
+| 基础命令可跑 | 让它执行 `git status` 或 `dir` / `ls` | 能返回命令结果 |
 
-1. 在 Claude Code 对话中输入：
-   ```
-   你能看到哪些 Skills？
-   ```
-
-2. Claude 应该会列出所有可用的 Skills，包括：
-   - workflow-producer（工作流导演）
-   - topic-generator（选题生成器）
-   - topic-research（选题调研）
-   - 等等...
-
-**如果 Claude 没有识别到 Skills：**
-- 参考下方的"常见问题排查"部分
-
-**开始使用：**
-
-验证通过后，直接对 Claude 说：
-
-```
-帮我写一篇关于XXX的文章
-```
-
-系统会自动引导你完成整个写作流程！
+如果这些都过了，就说明基础环境是正常的。
 
 ---
 
-### 常见问题排查
+## 项目级加载逻辑
 
-<details>
-<summary><b>问题：提示 "claude: command not found"</b></summary>
+很多人会误以为：
 
-**原因：** Claude Code 未正确安装或未添加到系统 PATH
+- clone 了仓库 = 一定能跑完整流程
 
-**解决方法：**
-1. 重新运行安装命令：`npm install -g @anthropic-ai/claude-code`
-2. 检查 npm 全局安装路径是否在 PATH 中：
-   ```powershell
-   npm config get prefix
-   ```
-3. 重启 PowerShell/终端
+实际不是。
 
-</details>
+这个仓库的完整版依赖 4 层同时存在：
 
-<details>
-<summary><b>问题：提示 "API authentication failed"</b></summary>
+- skill 作为入口：`.claude/skills/`
+- agent 作为执行单元：`.claude/agents/`
+- workflow 作为协议：`.claude/workflows/`
+- scripts 作为底层工具：`scripts/`
 
-**原因：** API Key 配置错误或未生效
+所以你必须做到：
 
-**解决方法：**
-1. 检查 `settings.json` 文件中的 API Key 是否正确
-2. 确认 API Base URL 是否正确
-3. 如果使用环境变量，重启 PowerShell 后重试
-4. 验证环境变量是否生效（参考上面的验证命令）
+1. clone 完整仓库
+2. 在项目根目录启动 `claude`
+3. 让这 4 层一起工作
 
-</details>
+少了其中一层，都不是完整链路。
 
-<details>
-<summary><b>问题：Windows 提示 "无法加载文件，因为在此系统上禁止运行脚本"</b></summary>
+### 双轨兼容后的真实结构
 
-**原因：** PowerShell 执行策略限制
+现在仓库里多了一层运行时事实源：
 
-**解决方法：**
-以管理员身份运行 PowerShell，执行：
-```powershell
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-```
+- `claude-runtime/`
 
-</details>
+维护逻辑变成：
 
-<details>
-<summary><b>问题：Claude Code 没有识别到项目的 Skills</b></summary>
+- 开发时优先修改 `claude-runtime/`
+- 然后同步生成项目兼容层 `.claude/`
+- 再同步生成插件目录 `plugins/writing-agent/`
 
-**原因：** Claude Code 可能没有正确扫描项目目录
-
-**解决方法：**
-
-1. **确认 Skills 目录存在：**
-   ```powershell
-   # Windows
-   Test-Path ".claude\skills"
-   
-   # Linux/macOS
-   ls -la .claude/skills/
-   ```
-
-2. **确认在项目目录中启动 Claude Code：**
-   ```powershell
-   # 必须先 cd 到项目目录
-   cd D:\Projects\writing-agent
-   
-   # 然后再启动
-   claude
-   ```
-   
-   ⚠️ **重要**：Claude Code 只会加载**当前目录**下的 `.claude/skills/`，如果你在其他目录启动，Skills 不会被加载。
-
-3. **重启 Claude Code：**
-   - 完全退出 Claude Code（输入 `exit` 或按 Ctrl+C）
-   - 确认在项目目录中
-   - 再次启动 `claude`
-
-4. **手动复制到全局目录（如果项目级 Skills 无法加载）：**
-   ```powershell
-   # Windows
-   xcopy /E /I ".claude\skills" "$env:USERPROFILE\.claude\skills"
-   
-   # Linux/macOS
-   cp -r .claude/skills/* ~/.claude/skills/
-   ```
-   
-   复制到全局目录后，Skills 在所有项目中都可用。
-
-5. **验证 Skills 加载：**
-   对 Claude 说："列出所有可用的 Skills" 或 "你能看到哪些 Skills？"
-
-</details>
-
-## 🚀 使用示例
-
-### 协作写作流程（全 14 阶段系统闭环）
-
-```
-你："我想写一篇关于35岁程序员危机的深度分析文章，3000字"
-    ↓
-Claude 会引导你：
-
-🎬 请选择工作流模式：
-【A. 轻量模式】快速产出
-【B. 协作模式】深度创作 ⭐ 推荐
-
-你选择 B（协作模式）后：
-
-📋 完整工作流：
-□ Stage 0: 🧠 经验装载 (记忆编译) ✨ v0.7.0 New
-   - 读取过往 `99_episode.md` 修正历史
-   - 生成 `00_memory_packet.md` 作为写作铁律
-   
-□ Stage 1: 主题与读者校准
-   - 选择切入方向（A/B/C）
-   - 确认受众、风格、字数
-   
-□ Stage 2: 案例与证据池
-   - 搜集真实数据、案例
-   
-□ Stage 3: 逻辑骨架搭建
-   - 设计文章结构
-   - 标注每段功能
-   
-□ Stage 4: 共情点设计
-   - 预测读者心理路径
-   - ⚡ 强化开头钩子设计
-   
-□ Stage 5: 🧱 具象化翻译
-   - 将抽象理论转化为带特写镜头的画面
-   
-□ Stage 5.5: 标题设计 ⭐ 必须
-   - 设计3个候选标题让你选择
-   - ⚡ 植入爆款标题公式
-   
-□ Stage 6: ✍️ 正式创作
-   - 前往原生初稿（draft_v1.md）
-   - ⚡ 强制阅读 Stage 0 记忆包
-   
-□ Stage 7: 主编审稿与改稿
-   - 重点检查AI味道
-   - 输出修订稿
-
-□ Stage 8: 发布前把关 ✨ New
-   - 发布前5问评审（标题/开头/认同/出路/分享）
-    ↓
-□ Stage 9: 读者模拟直播 ✨ New
-   - 心理弹幕/真话吐槽/朋友圈现场
-   
-□ Stage 10: 最终去AI味 ✨ New
-   - 深度扫描24种AI痕迹
-   - 注入观点与灵魂
-   
-□ Stage 11: 🎨 视觉增强 (可选) ✨ New
-   - 视觉风格设计 (Flat/Lofi/Cyberpunk)
-   - 自动生成 3-5 张配图并植入
-
-□ Stage 12: 📤 终局排版 Hook ✨ v0.7.0 New
-   - 脱离 LLM，通过后台正则自动洗版
-   - 生成完全排版干净的 `_clean.txt`
-
-□ Stage 13: 🔄 经验归因蒸馏 ✨ v0.7.0 New
-   - 自动回溯对撞成稿与初稿修改历史
-   - 提取新约束沉淀至 `99_episode.md`，用于未来的长记性学习
-```
-### 如何为文章配图
-
-如果在写作流程中没有生成配图，你可以随时手动调用 `article-illustrator` 子代理：
+对应命令：
 
 ```bash
-/slash-command 使用 article-illustrator 子代理为 articles/[项目名]/draft_vX.md 生成配图
+npm run sync:claude-runtime
+npm run check:claude-runtime
 ```
 
-**工作模式**：Agent 会先根据文章内容输出一份**配图策划书（Prompt 清单）**，**请务必检查并确认（或修改）**，确认后 Agent 才会批量执行生成并植入图片。
+第一条负责同步，第二条负责检查有没有漂移。
 
-**支持的模型**：默认使用 Google Gemini Image 模型，无需额外配置。
+这样可以避免后续出现：
 
-### 风格建模详细教程
-```
+- `git clone` 用户拿到的是新逻辑
+- `plugin` 用户拿到的还是旧逻辑
 
-### 风格建模详细教程
+如果你在改运行时相关内容，例如：
 
-**方式一：直接贴文章内容**
-```
-你："帮我分析这篇文章的风格：
+- `skills`
+- `agents`
+- `styles`
+- `workflows`
+- `scripts`
 
-[直接粘贴文章全文]
+那就不要只改 `.claude/` 或 `plugins/writing-agent/`，而是优先改 `claude-runtime/`。
 
-以后按这个风格写。"
-```
+---
 
-**方式二：使用 @ 引用文件**
-```
-你："帮我分析 @sample_article.md 的风格，以后按这个风格写"
-```
+## 推荐的新手使用顺序
 
-**方式三：提供多篇参考文章（推荐，更准确）**
-```
-你："帮我分析这几篇文章的共同风格：
-@article1.md
-@article2.md
-@article3.md
+如果你是第一次接触这类工具，我建议按这个顺序来：
 
-提取共性，保存为'XXX风格'"
-```
+### 路线 A：先看 Demo，再安装
 
-**方式四：URL 一键学习（🔥 强力推荐）**
-```
-你："学一下这几篇公众号文章的风格：
-https://mp.weixin.qq.com/s/xxxx
-https://mp.weixin.qq.com/s/yyyy
+1. 先看 [`demo/老板的AI战略骗局/`](demo/老板的AI战略骗局/)
+2. 看明白 `01_theme.md -> humanized_final_clean.txt` 这条链路
+3. 再决定你要走哪家模型和哪种费用方案
+4. 最后开始安装和配置
 
-如果作者已经在风格库里，就更新它的风格文件。"
+### 路线 B：直接上完整版
 
-👉 Claude 会自动：
-1. 打开浏览器抓取正文（自动绕过微信反爬）
-2. 将文章保存到 docs/ 文件夹归档
-3. 如果是新作者 -> 建新档
-4. 如果是老作者 -> 融合新特征，更新旧档
-```
+1. 先装 Node.js
+2. 再装 Claude Code
+3. clone 仓库
+4. 配模型或账号
+5. 在项目目录启动 `claude`
+6. 用 Demo 做第一轮验证
 
 **风格建模过程（v3.0 - 15维度）：**
 ```
@@ -931,30 +829,15 @@ Claude 会：
 下次写作时可以直接调用这个风格
 ```
 
-**最佳实践：**
-- 样本文章建议 3000 字以上，效果更好
-- 提供 3-5 篇同一作者的文章，提取的风格更准确
-- 风格文件可以手动编辑，补充或调整特征
+## 遇到问题了
 
-## 📚 核心 Skills 说明
+### 1. `claude: command not found`
 
-| Skill | 功能 | 调用时机 |
-|-------|------|---------|
-| `workflow-producer` | 工作流导演 | 所有写作请求的唯一入口 ⭐ |
-| `topic-generator` | 选题生成器 | 不知道写什么时，从0生成候选选题 ✨ New |
-| `topic-research` | 选题调研 | Stage 0: 动笔前的热点与痛点验证 ✨ New |
-| `writing-clarifier` | 澄清写作需求 | Stage 1: 主题与读者校准 |
-| `research-expert` | 调研素材 | Stage 2: 案例与证据池 |
-| `outline-architect` | 大纲架构师 | Stage 3: 逻辑骨架搭建 |
-| `empathy-designer` | 共情点设计师 | Stage 4: 共情点设计 |
-| `concretizer` | 具象化专家 | Stage 5: 具象化翻译（按需）|
-| `title-designer` | 标题设计师 | Stage 5.5: 标题设计（含爆款公式）✨ Upgrade |
-| `writing-executor` | 写作执行 | Stage 6: 正式创作（含开头钩子）✨ Upgrade |
-| `editor-review` | 主编审稿 | Stage 7: 主编审稿与改稿 |
-| `pre-publish-review` | 发布前评审 | Stage 8: 发布前5问把关 ✨ New |
-| `style-modeler` | 风格建模 | URL提取/批量建模/增量更新 ✨ Upgrade |
+通常是：
 
-## 🎨 风格库示例
+- Claude Code 没装好
+- PATH 没生效
+- 终端没重开
 
 项目自带四个风格示例（位于 `.kilo/styles/`，自动同步到 `.claude/styles/`）：
 
@@ -982,9 +865,12 @@ Claude 会：
 - **特色表达**："喂,等等,不对劲啊"、一手资料vs二道贩子、鼻子上长了个洋鸡蛋
 - **适用场景**：内容行业观察、产品评论、理解式批判
 
-你可以基于任何文章创建自己的风格库。
+```bash
+export HTTPS_PROXY=http://127.0.0.1:7890
+export HTTP_PROXY=http://127.0.0.1:7890
+```
 
-## 📖 详细文档
+**PowerShell：**
 
 - [多工具配置同步指南](SYNC.md) ⭐ 新增（Kilo / Trae / Claude Code 三端兼容）
 - [协作写作工作流快速参考](docs/WORKFLOW_QUICK_REFERENCE.md)
@@ -995,7 +881,7 @@ Claude 会：
 - [常见问题 FAQ](docs/FAQ.md)
 - [项目结构说明](docs/PROJECT_STRUCTURE.md)
 
-## 🛠️ 高级配置
+如果你长期需要代理，把它写进你的 shell 配置里。
 
 ### 配置同步（多工具用户必读）
 
@@ -1015,50 +901,68 @@ python scripts/sync_config.py --dry-run
 
 编辑 `.kilo/agent/writing-executor.md` 中的"反AI写作技巧"部分，添加你自己的规则。修改后运行 `python scripts/sync_config.py` 同步。
 
-### 调整字数控制精度
+如果你走 Native Install 路线，先确认：
 
 编辑 `.kilo/agent/writing-executor.md` 中的"字数控制"部分，修改允许范围（默认±20%）。修改后运行 `python scripts/sync_config.py` 同步。
 
-### 自定义工作流阶段
+然后重新执行安装脚本。
 
 编辑 `.kilo/skill/工作流导演/SKILL.md`，可以调整协作模式的阶段顺序或跳过某些阶段。修改后运行 `python scripts/sync_config.py` 同步。
 
-## 🤝 贡献指南
+### 4. 我 clone 了仓库，为什么还是没有完整流程
 
-欢迎提交 Issue 和 Pull Request！
+优先排查这三件事：
 
-1. Fork 本项目
-2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 开启 Pull Request
+1. 你是不是在项目根目录启动的 `claude`
+2. `.claude/skills/`、`.claude/agents/`、`.claude/workflows/`、`scripts/` 是否都在
+3. 你的仓库是不是拉到了最新版本
 
-## 📝 更新日志
+这套系统不是只靠一个 Skill 跑起来的，它依赖完整目录和项目内启动。
 
-查看 [CHANGELOG.md](CHANGELOG.md) 了解版本历史。
+### 5. 怎么升级 Claude Code
 
-**最新版本 v0.2.0 (2025-12-29)**
-- ✨ 风格建模升级至 v3.0（15维度）
-- ✨ 新增协作写作工作流（8阶段）
-- ✨ 新增标题设计师 Skill
-- ✨ 新增九边风、墨水怪风两套风格配方
-- 🔧 强制模式选择机制
-- 🔧 子 Skill 权限调整
+先试：
 
-## 📄 许可证
+```bash
+claude update
+```
 
-本项目采用 MIT 许可证 - 详见 [LICENSE](LICENSE) 文件。
+如果你更习惯沿用安装时的包管理方式，再用下面这些命令：
 
-## 🙏 致谢
+**Native Install：**
 
-- 感谢 [Claude Code](https://code.claude.com) 提供的 Skills 系统
-- 感谢所有贡献者和使用者的反馈
+```bash
+curl -fsSL https://claude.ai/install.sh | bash
+```
 
-## 📮 联系方式
+**Homebrew：**
 
-- 提交 Issue: [GitHub Issues](https://github.com/dongbeixiaohuo/writing-agent/issues)
-- 讨论区: [GitHub Discussions](https://github.com/dongbeixiaohuo/writing-agent/discussions)
+```bash
+brew upgrade --cask claude-code
+```
+
+**WinGet：**
+
+```powershell
+winget upgrade Anthropic.ClaudeCode
+```
+
+### 6. 想在 VS Code 里用
+
+去 VS Code 扩展市场搜索 `Claude Code`，安装 Anthropic 官方扩展即可。
+
+但建议先把 CLI 路线跑通，再切 IDE。
+
+### 7. 不想用终端，想用桌面应用
+
+可以直接去 [claude.ai/download](https://claude.ai/download) 下载 Desktop App。
+
+但这套仓库仍然建议你至少先把 CLI 跑通，因为项目目录上下文、skills、agents、workflows 的理解都更直接。
 
 ---
 
-**如果这个项目对你有帮助，请给个 ⭐ Star！**
+## 如果你只想记住最重要的 3 句话
+
+1. 先看 [`demo/老板的AI战略骗局/`](demo/老板的AI战略骗局/)，比先看安装说明更容易看懂项目价值。
+2. `DeepSeek-V3.2` 是默认推荐，不是因为它压过另外两家，而是因为它最适合低成本先把整套流程跑通。
+3. 完整版一定要在项目根目录启动 Claude Code，最后默认交付的是 `_clean.txt`，并可按需额外导出公众号排版 `.html`。

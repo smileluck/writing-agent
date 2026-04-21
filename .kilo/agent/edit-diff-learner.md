@@ -24,7 +24,7 @@ hidden: false
 在 `articles/[项目名]/` 目录下：
 
 1. **初稿（基线）**：找到 `draft_v1.md`——这是 AI 最原始的产物。
-2. **定稿（终点）**：找到目录中最新的定稿文件。按以下优先级判断：
+2. **定稿（终点）**：优先读取 `run_manifest.json` 中的 `clean_source_file` 或 `latest_body_file`；如果没有，再按以下优先级判断：
    - 文件名含 `final` 的（如 `draft_final.md`）
    - 文件名含 `humanized` 的（如 `draft_v4_humanized.md`）
    - 文件名含 `最终稿` 的
@@ -36,13 +36,32 @@ hidden: false
 
 ```bash
 ls articles/[项目名]/draft*.md
+cat articles/[项目名]/run_manifest.json  # 如存在，优先读取
 ```
+
+**筛选规则**：
+- 文件名以 `_notes.md` 结尾的，全部排除，不参与正文版本判断。
+- `draft_v1_notes.md`、`draft_v2_notes.md` 这类文件只能作为旁证，不能当初稿或定稿。
 
 ### Step 2: 阅读两版文本
 
 ```bash
 cat articles/[项目名]/draft_v1.md       # AI 初稿
 cat articles/[项目名]/[定稿文件名]       # 用户确认的最终版
+```
+
+如果存在同名备注文件，可选读取：
+
+```bash
+cat articles/[项目名]/draft_v1_notes.md
+cat articles/[项目名]/[定稿文件名去掉.md后加_notes.md]
+```
+
+并使用统一脚本统计正文字数：
+
+```bash
+python scripts/generate_clean.py --stats articles/[项目名]/draft_v1.md
+python scripts/generate_clean.py --stats articles/[项目名]/[定稿文件名]
 ```
 
 ### Step 3: 差异归因分析
@@ -78,7 +97,7 @@ cat articles/[项目名]/[定稿文件名]       # 用户确认的最终版
 
 | 指标 | 初稿 | 定稿 | 变化 |
 |------|------|------|------|
-| 总字数 | X | Y | +/-Z |
+| 正文字符数 | X | Y | +/-Z |
 | 段落数 | X | Y | +/-Z |
 | 标题 | [初稿标题] | [定稿标题] | 改/未改 |
 
@@ -148,6 +167,7 @@ cat articles/[项目名]/[定稿文件名]       # 用户确认的最终版
 2. **规则必须具体可执行**：不要写"文章应该更生动"这种废话，要写"开头第一句用场景动作描写，不用抽象概念"这种能直接当 prompt 用的指令。
 3. **标注适用边界**：每条规则都要说明它适用的场景，防止过度泛化。
 4. **如果初稿等于定稿，直接跳过**，输出一行说明即可。
+5. **不要把 `_notes.md` 当正文版本**：备注文件只能辅助理解修改动机，不能参与正文对比。
 
 ## 版本记录
 - v1.0.0 (2026-03-14): 初版，实现"初稿 vs 定稿"的结构化复盘。
